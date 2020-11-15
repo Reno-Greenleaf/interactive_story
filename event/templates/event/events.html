@@ -1,0 +1,21 @@
+{% load static %}<html>
+	<head>
+		<title>Events</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
+	</head>
+	<body>
+		{% if messages %}
+		<ul>
+			{% for message in messages %}
+			<li>{{ message }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+
+		<form action="{% url 'events' %}" method="post">
+			{% csrf_token %}
+			{{ form }}
+			<input type="submit" value="Save">
+		</form>
+	</body>
+</html>

@@ -1,0 +1,12 @@
+input[type="submit"] {
+	display: block;
+	margin: 1em;
+}
+
+label {
+	display: block;
+}
+
+.helptext {
+	font-size: 13;
+}
