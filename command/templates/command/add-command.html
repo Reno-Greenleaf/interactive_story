@@ -1,0 +1,32 @@
+{% load static %}<html>
+	<head>
+		<title>Add Command</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
+	</head>
+	<body>
+		{% if messages %}
+		<ul>
+			{% for message in messages %}
+			<li>{{ message }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+
+		<ul>
+			<li><a href="{% url 'events' %}">Events</a>
+		</ul>
+
+		<h3>Commands:</h3>
+		<ul>
+			{% for command in commands %}
+			<li><a href="{% url 'edit-command' command.pk %}">{{ command.text }}</a></li>
+			{% endfor %}
+		</ul>
+
+		<form action="{% url 'add-command' %}" method="post">
+			{% csrf_token %}
+			{{ form }}
+			<input type="submit" value="Add">
+		</form>
+	</body>
+</html>

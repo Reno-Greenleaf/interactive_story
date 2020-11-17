@@ -17,8 +17,12 @@ from django.contrib import admin
 from django.urls import path
 
 from event.views import Events
+from command.views import AddCommand, EditCommand, DeleteCommand
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Events.as_view(), name='events')
+    path('', Events.as_view(), name='events'),
+    path('command/add', AddCommand.as_view(), name='add-command'),
+    path('command/edit/<int:command_id>', EditCommand.as_view(), name='edit-command'),
+    path('command/delete/<int:command_id>', DeleteCommand.as_view(), name='delete-command'),
 ]

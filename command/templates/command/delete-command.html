@@ -1,6 +1,6 @@
 {% load static %}<html>
 	<head>
-		<title>Events</title>
+		<title>Delete Command</title>
 		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
 	</head>
 	<body>
@@ -13,13 +13,15 @@
 		{% endif %}
 
 		<ul>
+			<li><a href="{% url 'events' %}">Events</a>
 			<li><a href="{% url 'add-command' %}">Add command</a>
 		</ul>
 
-		<form action="{% url 'events' %}" method="post">
+		<form action="{% url 'delete-command' command.pk %}" method="post">
 			{% csrf_token %}
-			{{ form }}
-			<input type="submit" value="Save">
+			<p>Do you want to delete command {{ command.text }}?</p>
+			<input type="submit" value="Delete">
+			<a href="{% url 'edit-command' command.pk %}">Cancel</a>
 		</form>
 	</body>
 </html>

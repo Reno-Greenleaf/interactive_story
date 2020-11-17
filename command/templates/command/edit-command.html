@@ -1,6 +1,6 @@
 {% load static %}<html>
 	<head>
-		<title>Events</title>
+		<title>Edit Command</title>
 		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
 	</head>
 	<body>
@@ -13,13 +13,22 @@
 		{% endif %}
 
 		<ul>
+			<li><a href="{% url 'events' %}">Events</a>
 			<li><a href="{% url 'add-command' %}">Add command</a>
 		</ul>
 
-		<form action="{% url 'events' %}" method="post">
+		<h3>Commands:</h3>
+		<ul>
+			{% for command in commands %}
+			<li><a href="{% url 'edit-command' command.pk %}">{{ command.text }}</a></li>
+			{% endfor %}
+		</ul>
+
+		<form action="{% url 'edit-command' command.pk %}" method="post">
 			{% csrf_token %}
 			{{ form }}
 			<input type="submit" value="Save">
+			<a href="{% url 'delete-command' command.pk %}">Delete</a>
 		</form>
 	</body>
 </html>
