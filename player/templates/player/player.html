@@ -1,0 +1,11 @@
+<html>
+	<head></head>
+	<body>
+		<form method="get" action="{% url 'play' %}">
+			{% csrf_token %}
+			{{ form }}
+			<input type="submit" value=">">
+			<p>{{ output }}</p>
+		</form>
+	</body>
+</html>
