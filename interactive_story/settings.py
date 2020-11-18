@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'event',
     'command',
+    'place',
     'player',
     'django.contrib.admin',
     'django.contrib.auth',

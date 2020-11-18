@@ -37,7 +37,7 @@ class EditCommand(View):
 
         if not form.is_valid():
             commands = Command.objects.all()
-            return render(request, 'command/add-command.html', {'commands': commands, 'command': command, 'form': form})
+            return render(request, 'command/edit-command.html', {'commands': commands, 'command': command, 'form': form})
 
         command.text = form.cleaned_data['text']
         command.output = form.cleaned_data['output']

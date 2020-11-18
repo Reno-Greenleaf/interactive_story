@@ -1,6 +1,6 @@
 {% load static %}<html>
 	<head>
-		<title>Delete Command</title>
+		<title>Edit Place</title>
 		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
 	</head>
 	<body>
@@ -18,11 +18,17 @@
 			<li><a href="{% url 'add-place' %}">Add place</a>
 		</ul>
 
-		<form action="{% url 'delete-command' command.pk %}" method="post">
+		<ul>
+			{% for place in places %}
+			<li><a href="{% url 'edit-place' place.pk %}">{{ place.name }}</a></li>
+			{% endfor %}
+		</ul>
+
+		<form action="{% url 'edit-place' place.pk %}" method="post">
 			{% csrf_token %}
-			<p>Do you want to delete command {{ command.text }}?</p>
-			<input type="submit" value="Delete">
-			<a href="{% url 'edit-command' command.pk %}">Cancel</a>
+			{{ form }}
+			<input type="submit" value="Save">
+			<a href="{% url 'delete-place' place.pk %}">Delete</a>
 		</form>
 	</body>
 </html>
