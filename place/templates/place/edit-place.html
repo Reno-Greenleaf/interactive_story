@@ -1,34 +1,18 @@
-{% load static %}<html>
-	<head>
-		<title>Edit Place</title>
-		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
-	</head>
-	<body>
-		{% if messages %}
-		<ul>
-			{% for message in messages %}
-			<li>{{ message }}</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
+{% extends 'interactive_story/editor.html' %}
 
-		<ul>
-			<li><a href="{% url 'events' %}">Events</a>
-			<li><a href="{% url 'add-command' %}">Add command</a>
-			<li><a href="{% url 'add-place' %}">Add place</a>
-		</ul>
+{% block title %}Edit place{% endblock %}
 
-		<ul>
-			{% for place in places %}
-			<li><a href="{% url 'edit-place' place.pk %}">{{ place.name }}</a></li>
-			{% endfor %}
-		</ul>
+{% block form %}
+<ul>
+	{% for place in places %}
+	<li><a href="{% url 'edit-place' place.pk %}">{{ place.name }}</a></li>
+	{% endfor %}
+</ul>
 
-		<form action="{% url 'edit-place' place.pk %}" method="post">
-			{% csrf_token %}
-			{{ form }}
-			<input type="submit" value="Save">
-			<a href="{% url 'delete-place' place.pk %}">Delete</a>
-		</form>
-	</body>
-</html>
+<form action="{% url 'edit-place' place.pk %}" method="post">
+	{% csrf_token %}
+	{{ form }}
+	<input type="submit" value="Save">
+	<a href="{% url 'delete-place' place.pk %}">Delete</a>
+</form>
+{% endblock %}

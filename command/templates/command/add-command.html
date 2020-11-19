@@ -1,33 +1,18 @@
-{% load static %}<html>
-	<head>
-		<title>Add Command</title>
-		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
-	</head>
-	<body>
-		{% if messages %}
-		<ul>
-			{% for message in messages %}
-			<li>{{ message }}</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
+{% extends 'interactive_story/editor.html' %}
 
-		<ul>
-			<li><a href="{% url 'events' %}">Events</a>
-			<li><a href="{% url 'add-place' %}">Add place</a>
-		</ul>
+{% block title %}Add Command{% endblock %}
 
-		<h3>Commands:</h3>
-		<ul>
-			{% for command in commands %}
-			<li><a href="{% url 'edit-command' command.pk %}">{{ command.text }}</a></li>
-			{% endfor %}
-		</ul>
+{% block form %}
+<h3>Commands:</h3>
+<ul>
+	{% for command in commands %}
+	<li><a href="{% url 'edit-command' command.pk %}">{{ command.text }}</a></li>
+	{% endfor %}
+</ul>
 
-		<form action="{% url 'add-command' %}" method="post">
-			{% csrf_token %}
-			{{ form }}
-			<input type="submit" value="Add">
-		</form>
-	</body>
-</html>
+<form action="{% url 'add-command' %}" method="post">
+	{% csrf_token %}
+	{{ form }}
+	<input type="submit" value="Add">
+</form>
+{% endblock %}

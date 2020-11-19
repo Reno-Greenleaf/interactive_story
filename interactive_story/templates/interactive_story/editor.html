@@ -1,0 +1,25 @@
+{% load static %}<html>
+	<head>
+		<title>{% block title %}Editor{% endblock %}</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
+	</head>
+	<body>
+		{% if messages %}
+		<ul>
+			{% for message in messages %}
+			<li>{{ message }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+
+		<ul>
+			{% block menu %}
+			<li><a href="{% url 'add-command' %}">Add command</a>
+			<li><a href="{% url 'add-place' %}">Add place</a>
+			<li><a href="{% url 'events' %}">Events</a>
+			{% endblock %}
+		</ul>
+
+		{% block form %}{% endblock %}
+	</body>
+</html>

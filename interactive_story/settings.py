@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'command',
     'place',
     'player',
+    'interactive_story',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

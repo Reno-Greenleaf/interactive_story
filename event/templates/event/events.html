@@ -1,26 +1,11 @@
-{% load static %}<html>
-	<head>
-		<title>Events</title>
-		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
-	</head>
-	<body>
-		{% if messages %}
-		<ul>
-			{% for message in messages %}
-			<li>{{ message }}</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
+{% extends 'interactive_story/editor.html' %}
 
-		<ul>
-			<li><a href="{% url 'add-command' %}">Add command</a>
-			<li><a href="{% url 'add-place' %}">Add place</a>
-		</ul>
+{% block title %}Events{% endblock %}
 
-		<form action="{% url 'events' %}" method="post">
-			{% csrf_token %}
-			{{ form }}
-			<input type="submit" value="Save">
-		</form>
-	</body>
-</html>
+{% block form %}
+<form action="{% url 'events' %}" method="post">
+	{% csrf_token %}
+	{{ form }}
+	<input type="submit" value="Save">
+</form>
+{% endblock %}

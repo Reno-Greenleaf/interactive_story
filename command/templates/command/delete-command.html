@@ -1,28 +1,12 @@
-{% load static %}<html>
-	<head>
-		<title>Delete Command</title>
-		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
-	</head>
-	<body>
-		{% if messages %}
-		<ul>
-			{% for message in messages %}
-			<li>{{ message }}</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
+{% extends 'interactive_story/editor.html' %}
 
-		<ul>
-			<li><a href="{% url 'events' %}">Events</a>
-			<li><a href="{% url 'add-command' %}">Add command</a>
-			<li><a href="{% url 'add-place' %}">Add place</a>
-		</ul>
+{% block title %}Delete Command{% endblock %}
 
-		<form action="{% url 'delete-command' command.pk %}" method="post">
-			{% csrf_token %}
-			<p>Do you want to delete command {{ command.text }}?</p>
-			<input type="submit" value="Delete">
-			<a href="{% url 'edit-command' command.pk %}">Cancel</a>
-		</form>
-	</body>
-</html>
+{% block form %}
+<form action="{% url 'delete-command' command.pk %}" method="post">
+	{% csrf_token %}
+	<p>Do you want to delete command {{ command.text }}?</p>
+	<input type="submit" value="Delete">
+	<a href="{% url 'edit-command' command.pk %}">Cancel</a>
+</form>
+{% endblock %}
