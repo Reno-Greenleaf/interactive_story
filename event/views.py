@@ -12,7 +12,7 @@ class Events(GameView):
     http_method_names = ['get', 'post']
 
     def get(self, request):
-        events = Event.objects.order_by('chronology').all()
+        events = self.current_game.events.order_by('chronology').all()
         names = []
 
         for event in events:
@@ -33,7 +33,7 @@ class Events(GameView):
         lines = form.cleaned_data['events']
 
         for line in lines:
-            event, created = Event.objects.get_or_create(name=line)
+            event, created = self.current_game.events.get_or_create(name=line)
             event.chronology = line_number
             event.save()
 
@@ -42,7 +42,7 @@ class Events(GameView):
 
             line_number += 1
 
-        to_delete = Event.objects.exclude(name__in=lines)
+        to_delete = self.current_game.events.exclude(name__in=lines)
 
         for event in to_delete:
             event.delete()
