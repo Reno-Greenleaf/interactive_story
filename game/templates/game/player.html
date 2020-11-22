@@ -1,6 +1,9 @@
 <html>
 	<head></head>
 	<body>
+		<ul>
+			<li><a href="{% url 'events' %}">Events</a>
+		</ul>
 		<form method="get" action="{% url 'play' %}">
 			{% csrf_token %}
 			{{ form }}

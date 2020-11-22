@@ -1,0 +1,12 @@
+{% extends 'interactive_story/editor.html' %}
+
+{% block title %}Delete Game{% endblock %}
+
+{% block form %}
+<form action="{% url 'delete-game' game.pk %}" method="post">
+	{% csrf_token %}
+	<p>Do you want to delete {{ game.name }}?</p>
+	<input type="submit" value="Delete">
+	<a href="{% url 'edit-game' game.pk %}">Cancel</a>
+</form>
+{% endblock %}

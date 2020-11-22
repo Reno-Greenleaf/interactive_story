@@ -1,0 +1,18 @@
+{% extends 'interactive_story/editor.html' %}
+
+{% block title %}Change Game{% endblock %}
+
+{% block form %}
+<ul>
+	{% for game in games %}
+		<li><a href="{% url 'edit-game' game.pk %}">{{ game.name }}</a>
+	{% endfor %}
+</ul>
+
+<form action="{% url 'edit-game' game.pk %}" method="post">
+	{% csrf_token %}
+	{{ form }}
+	<input type="submit" value="Save">
+	<a href="{% url 'delete-game' game.pk %}">Delete</a>
+</form>
+{% endblock %}

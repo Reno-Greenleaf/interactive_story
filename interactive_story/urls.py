@@ -18,7 +18,7 @@ from django.urls import path
 
 from event.views import Events
 from command.views import AddCommand, EditCommand, DeleteCommand
-from player.views import Player
+from game.views import Player, CreateGame, DeleteGame, EditGame
 from place.views import AddPlace, EditPlace, DeletePlace
 
 urlpatterns = [
@@ -28,6 +28,9 @@ urlpatterns = [
     path('command/edit/<int:command_id>', EditCommand.as_view(), name='edit-command'),
     path('command/delete/<int:command_id>', DeleteCommand.as_view(), name='delete-command'),
     path('play', Player.as_view(), name='play'),
+    path('game/create', CreateGame.as_view(), name='create-game'),
+    path('game/edit/<int:game_id>', EditGame.as_view(), name='edit-game'),
+    path('game/delete/<int:game_id>', DeleteGame.as_view(), name='delete-game'),
     path('place/add', AddPlace.as_view(), name='add-place'),
     path('place/edit/<int:place_id>', EditPlace.as_view(), name='edit-place'),
     path('place/delete/<int:place_id>', DeletePlace.as_view(), name='delete-place'),

@@ -1,0 +1,17 @@
+{% extends 'interactive_story/editor.html' %}
+
+{% block title %}Create Game{% endblock %}
+
+{% block form %}
+<ul>
+	{% for game in games %}
+		<li><a href="{% url 'edit-game' game.pk %}">{{ game.name }}</a>
+	{% endfor %}
+</ul>
+
+<form action="{% url 'create-game' %}" method="post">
+	{% csrf_token %}
+	{{ form }}
+	<input type="submit" value="Create">
+</form>
+{% endblock %}

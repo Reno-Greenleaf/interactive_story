@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     'event',
     'command',
     'place',
-    'player',
+    'game',
     'interactive_story',
     'django.contrib.admin',
     'django.contrib.auth',
