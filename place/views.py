@@ -3,11 +3,12 @@ from django.views import View
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from game.views import GameView
 from place.models import Place
 from place.forms import PlaceForm
 
 
-class AddPlace(View):
+class AddPlace(GameView):
     def get(self, request):
         form = PlaceForm()
         places = Place.objects.all()
@@ -24,7 +25,7 @@ class AddPlace(View):
         return HttpResponseRedirect(reverse('add-place'))
 
 
-class EditPlace(View):
+class EditPlace(GameView):
     def get(self, request, place_id):
         places = Place.objects.all()
         place = Place.objects.get(pk=place_id)
@@ -45,7 +46,7 @@ class EditPlace(View):
         return HttpResponseRedirect(reverse('add-place'))
 
 
-class DeletePlace(View):
+class DeletePlace(GameView):
     def get(self, request, place_id):
         place = Place.objects.get(pk=place_id)
         return render(request, 'place/delete-place.html', {'place': place})

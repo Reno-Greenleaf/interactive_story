@@ -8,7 +8,20 @@ from django.contrib import messages
 from game.models import Game
 
 
-class Player(View):
+class GameView(View):
+    def dispatch(self, request, *args, **kwargs):
+        game_id = request.session.get('game', 0)
+
+        try:
+            self.current_game = Game.objects.get(pk=game_id)
+        except Game.DoesNotExist:
+            messages.add_message(request, messages.INFO, "A game isn't selected.")
+            return HttpResponseRedirect(reverse('games'))
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+class Player(GameView):
     def get(self, request):
         output = 'Unclear.'
         form = PlayForm(request.GET)
@@ -40,7 +53,7 @@ class CreateGame(View):
         return HttpResponseRedirect(reverse('events'))
 
 
-class EditGame(View):
+class EditGame(GameView):
     def get(self, request, game_id):
         games = Game.objects.all()
         game = Game.objects.get(pk=game_id)
@@ -57,10 +70,10 @@ class EditGame(View):
 
         game.name = form.cleaned_data['name']
         game.save()
-        return HttpResponseRedirect(reverse('create-game'))
+        return HttpResponseRedirect(reverse('events'))
 
 
-class DeleteGame(View):
+class DeleteGame(GameView):
     def get(self, request, game_id):
         game = Game.objects.get(pk=game_id)
         return render(request, 'game/delete-game.html', {'game': game})
@@ -69,7 +82,8 @@ class DeleteGame(View):
         game = Game.objects.get(pk=game_id)
         game.delete()
         messages.add_message(request, messages.INFO, 'Removed "{0}"'.format(game.name))
-        return HttpResponseRedirect(reverse('create-game'))
+        request.session['game'] = 0
+        return HttpResponseRedirect(reverse('games'))
 
 
 class SelectGame(View):

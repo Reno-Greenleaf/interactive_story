@@ -3,11 +3,12 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
 from django.contrib import messages
+from game.views import GameView
 from event.models import Event
 from event.forms import EventsForm
 
 
-class Events(View):
+class Events(GameView):
     http_method_names = ['get', 'post']
 
     def get(self, request):

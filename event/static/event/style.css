@@ -10,3 +10,7 @@ label {
 .helptext {
 	font-size: 13;
 }
+
+ul.messages {
+	border: 1px solid black;
+}

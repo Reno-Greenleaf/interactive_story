@@ -3,11 +3,23 @@
 		<title>Games</title>
 	</head>
 	<body>
+		{% if messages %}
+		<ul class="messages">
+			{% for message in messages %}
+			<li>{{ message }}
+			{% endfor %}
+		</ul>
+		{% endif %}
+
+		{% if games %}
 		<ul>
 		{% for game in games %}
 			<li><a href="{% url 'select-game' game.pk %}">{{ game.name }}</a>
 		{% endfor %}
-		<p><a href="{% url 'create-game' %}">Create new one.</a></p>
 		</ul>
+		{% else %}
+		<p>There're no games.</p>
+		{% endif %}
+		<p><a href="{% url 'create-game' %}">Create new one.</a></p>
 	</body>
 </html>

@@ -3,11 +3,12 @@ from django.views import View
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from game.views import GameView
 from command.models import Command
 from command.forms import CommandForm
 
 
-class AddCommand(View):
+class AddCommand(GameView):
     def get(self, request):
         commands = Command.objects.all()
         form = CommandForm()
@@ -24,7 +25,7 @@ class AddCommand(View):
         return HttpResponseRedirect(reverse('add-command'))
 
 
-class EditCommand(View):
+class EditCommand(GameView):
     def get(self, request, command_id):
         commands = Command.objects.all()
         command = Command.objects.get(pk=command_id)
@@ -45,7 +46,7 @@ class EditCommand(View):
         return HttpResponseRedirect(reverse('add-command'))
 
 
-class DeleteCommand(View):
+class DeleteCommand(GameView):
     def get(self, request, command_id):
         command = Command.objects.get(pk=command_id)
         return render(request, 'command/delete-command.html', {'command': command})
