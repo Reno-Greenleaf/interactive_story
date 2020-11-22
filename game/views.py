@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from command.models import Command
-from game.forms import PlayForm, GameForm
+from game.forms import PlayForm, GameForm, SelectGameForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
@@ -34,8 +34,10 @@ class CreateGame(View):
             games = Game.objects.all()
             return render(request, 'game/create-game.html', {'form': form, 'games': games})
 
-        Game.objects.create(name=form.cleaned_data['name'])
-        return HttpResponseRedirect(reverse('create-game'))
+        game = Game.objects.create(name=form.cleaned_data['name'])
+        request.session['game'] = game.pk
+        messages.add_message(request, messages.INFO, 'Selected {0}'.format(game.name))
+        return HttpResponseRedirect(reverse('events'))
 
 
 class EditGame(View):
@@ -68,3 +70,17 @@ class DeleteGame(View):
         game.delete()
         messages.add_message(request, messages.INFO, 'Removed "{0}"'.format(game.name))
         return HttpResponseRedirect(reverse('create-game'))
+
+
+class SelectGame(View):
+    def get(self, request, game_id):
+        game = Game.objects.get(pk=game_id)
+        request.session['game'] = game.pk
+        messages.add_message(request, messages.INFO, 'Selected {0}'.format(game.name))
+        return HttpResponseRedirect(reverse('events'))
+
+
+class Games(View):
+    def get(self, request):
+        games = Game.objects.all()
+        return render(request, 'game/games.html', {'games': games})

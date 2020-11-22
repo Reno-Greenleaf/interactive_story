@@ -1,0 +1,13 @@
+<html>
+	<head>
+		<title>Games</title>
+	</head>
+	<body>
+		<ul>
+		{% for game in games %}
+			<li><a href="{% url 'select-game' game.pk %}">{{ game.name }}</a>
+		{% endfor %}
+		<p><a href="{% url 'create-game' %}">Create new one.</a></p>
+		</ul>
+	</body>
+</html>

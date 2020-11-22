@@ -4,6 +4,9 @@
 		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
 	</head>
 	<body>
+		{% if current_game %}
+		<h1>Working on {{ current_game.name }}</h1>
+		{% endif %}
 		{% if messages %}
 		<ul>
 			{% for message in messages %}
@@ -14,6 +17,7 @@
 
 		<ul>
 			{% block menu %}
+			<li><a href="{% url 'games' %}">Games</a>
 			<li><a href="{% url 'add-command' %}">Add command</a>
 			<li><a href="{% url 'add-place' %}">Add place</a>
 			<li><a href="{% url 'events' %}">Events</a>

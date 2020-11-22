@@ -32,4 +32,4 @@ class Multiline(forms.CharField):
 
 
 class EventsForm(forms.Form):
-    events = Multiline(help_text='Outline the plot by listing unique events.')
+    events = Multiline(help_text='Outline the plot by listing unique events.', required=False)

@@ -18,19 +18,21 @@ from django.urls import path
 
 from event.views import Events
 from command.views import AddCommand, EditCommand, DeleteCommand
-from game.views import Player, CreateGame, DeleteGame, EditGame
+from game.views import Player, CreateGame, DeleteGame, EditGame, SelectGame, Games
 from place.views import AddPlace, EditPlace, DeletePlace
 
 urlpatterns = [
+    path('', Games.as_view(), name='games'),
     path('admin/', admin.site.urls),
-    path('', Events.as_view(), name='events'),
+    path('events', Events.as_view(), name='events'),
     path('command/add', AddCommand.as_view(), name='add-command'),
     path('command/edit/<int:command_id>', EditCommand.as_view(), name='edit-command'),
     path('command/delete/<int:command_id>', DeleteCommand.as_view(), name='delete-command'),
     path('play', Player.as_view(), name='play'),
-    path('game/create', CreateGame.as_view(), name='create-game'),
     path('game/edit/<int:game_id>', EditGame.as_view(), name='edit-game'),
+    path('game/create', CreateGame.as_view(), name='create-game'),
     path('game/delete/<int:game_id>', DeleteGame.as_view(), name='delete-game'),
+    path('game/select/<int:game_id>', SelectGame.as_view(), name='select-game'),
     path('place/add', AddPlace.as_view(), name='add-place'),
     path('place/edit/<int:place_id>', EditPlace.as_view(), name='edit-place'),
     path('place/delete/<int:place_id>', DeletePlace.as_view(), name='delete-place'),
