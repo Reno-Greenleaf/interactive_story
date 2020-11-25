@@ -12,17 +12,21 @@ from command.forms import CommandForm
 class AddCommand(GameView):
     def get(self, request):
         commands = self.current_game.commands.all()
-        form = CommandForm()
+        form = CommandForm(self.current_game)
         return render(request, 'command/add-command.html', {'commands': commands, 'form': form})
 
     def post(self, request):
-        form = CommandForm(request.POST)
+        form = CommandForm(self.current_game, request.POST)
 
         if not form.is_valid():
             commands = self.current_game.commands.all()
             return render(request, 'command/add-command.html', {'commands': commands, 'form': form})
 
-        self.current_game.commands.create(text=form.cleaned_data['text'], output=form.cleaned_data['output'])
+        self.current_game.commands.create(
+            text=form.cleaned_data['text'],
+            output=form.cleaned_data['output'],
+            context = form.cleaned_data['context'],
+        )
         return HttpResponseRedirect(reverse('add-command'))
 
 
@@ -30,11 +34,11 @@ class EditCommand(GameView):
     def get(self, request, command_id):
         commands = self.current_game.commands.all()
         command = self.current_game.commands.get(pk=command_id)
-        form = CommandForm(initial={'text': command.text, 'output': command.output})
+        form = CommandForm(self.current_game, initial={'text': command.text, 'output': command.output, 'context': command.context})
         return render(request, 'command/edit-command.html', {'commands': commands, 'command': command, 'form': form})
 
     def post(self, request, command_id):
-        form = CommandForm(request.POST)
+        form = CommandForm(self.current_game, request.POST)
         command = self.current_game.commands.get(pk=command_id)
 
         if not form.is_valid():
@@ -43,6 +47,7 @@ class EditCommand(GameView):
 
         command.text = form.cleaned_data['text']
         command.output = form.cleaned_data['output']
+        command.context = form.cleaned_data['context']
         command.save()
         return HttpResponseRedirect(reverse('add-command'))
 
