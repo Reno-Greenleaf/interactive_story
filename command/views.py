@@ -26,6 +26,8 @@ class AddCommand(GameView):
             text=form.cleaned_data['text'],
             output=form.cleaned_data['output'],
             context = form.cleaned_data['context'],
+            destination = form.cleaned_data['destination'],
+            requirement = form.cleaned_data['requirement'],
         )
         return HttpResponseRedirect(reverse('add-command'))
 
@@ -34,7 +36,7 @@ class EditCommand(GameView):
     def get(self, request, command_id):
         commands = self.current_game.commands.all()
         command = self.current_game.commands.get(pk=command_id)
-        form = CommandForm(self.current_game, initial={'text': command.text, 'output': command.output, 'context': command.context})
+        form = CommandForm(self.current_game, initial={'text': command.text, 'output': command.output, 'context': command.context, 'destination': command.destination, 'requirement': command.requirement})
         return render(request, 'command/edit-command.html', {'commands': commands, 'command': command, 'form': form})
 
     def post(self, request, command_id):
@@ -48,6 +50,8 @@ class EditCommand(GameView):
         command.text = form.cleaned_data['text']
         command.output = form.cleaned_data['output']
         command.context = form.cleaned_data['context']
+        command.destination = form.cleaned_data['destination']
+        command.requirement = form.cleaned_data['requirement']
         command.save()
         return HttpResponseRedirect(reverse('add-command'))
 

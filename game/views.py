@@ -26,12 +26,18 @@ class Player(GameView):
         output = 'Unclear.'
         form = PlayForm(request.GET)
         command_text = request.GET.get('command', '')
-        command = Command.objects.filter(text=command_text).first()
+        place = self.current_game.starting_place
+
+        if place:
+            command = place.commands.filter(text=command_text).first()
+        else:
+            command = self.current_game.commands.filter(text=command_text).first()
 
         if command:
             output = command.output
+            request.session['place'] = command.destination
 
-        return render(request, 'game/player.html', {'form': form, 'output': output})
+        return render(request, 'game/player.html', {'form': form, 'output': output, 'place': place})
 
 
 class CreateGame(View):

@@ -13,3 +13,6 @@ class Event(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['name', 'game'], name='unique_event')
         ]
+
+    def __str__(self):
+        return self.name

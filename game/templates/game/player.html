@@ -2,8 +2,11 @@
 	<head></head>
 	<body>
 		<ul>
-			<li><a href="{% url 'events' %}">Events</a>
+			<li><a href="{% url 'games' %}">Games</a>
 		</ul>
+		{% if place %}
+		<p>{{ place.description }}</p>
+		{% endif %}
 		<form method="get" action="{% url 'play' %}">
 			{% csrf_token %}
 			{{ form }}

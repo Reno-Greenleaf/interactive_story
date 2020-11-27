@@ -9,7 +9,7 @@ class PlayForm(forms.Form):
 
 class GameForm(forms.Form):
     name = forms.CharField()
-    starting_place = forms.ModelChoiceField(queryset=Place.objects.none(), required=False)
+    starting_place = forms.ModelChoiceField(queryset=Place.objects.none(), required=False, empty_label='<Anywhere>')
 
     def __init__(self, game = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
