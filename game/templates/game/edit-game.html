@@ -3,10 +3,10 @@
 {% block title %}Change Game{% endblock %}
 
 {% block form %}
-<form action="{% url 'edit-game' game.pk %}" method="post">
+<form action="{% url 'edit-game' %}" method="post">
 	{% csrf_token %}
 	{{ form }}
 	<input type="submit" value="Save">
-	<a href="{% url 'delete-game' game.pk %}">Delete</a>
+	<a href="{% url 'delete-game' %}">Delete</a>
 </form>
 {% endblock %}

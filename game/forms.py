@@ -1,4 +1,5 @@
 from django import forms
+from place.models import Place
 from game.models import Game
 
 
@@ -8,10 +9,11 @@ class PlayForm(forms.Form):
 
 class GameForm(forms.Form):
     name = forms.CharField()
+    starting_place = forms.ModelChoiceField(queryset=Place.objects.none(), required=False)
 
+    def __init__(self, game = None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-class SelectGameForm(forms.Form):
-    games = forms.ModelChoiceField(
-        queryset=Game.objects.all(),
-        empty_label='<Select a game>',
-    )
+        if game:
+            print(game)
+            self.fields['starting_place'].queryset = game.places.all()

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from command.models import Command
-from game.forms import PlayForm, GameForm, SelectGameForm
+from game.forms import PlayForm, GameForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
@@ -37,11 +37,11 @@ class Player(GameView):
 class CreateGame(View):
     def get(self, request):
         games = Game.objects.all()
-        form = GameForm()
+        form = GameForm(None)
         return render(request, 'game/create-game.html', {'form': form, 'games': games})
 
     def post(self, request):
-        form = GameForm(request.POST)
+        form = GameForm(None, request.POST)
 
         if not form.is_valid():
             games = Game.objects.all()
@@ -54,32 +54,32 @@ class CreateGame(View):
 
 
 class EditGame(GameView):
-    def get(self, request, game_id):
+    def get(self, request):
         games = Game.objects.all()
-        game = Game.objects.get(pk=game_id)
-        form = GameForm(initial={'name': game.name})
+        game = self.current_game
+        form = GameForm(self.current_game, initial={'name': game.name, 'starting_place': game.starting_place})
         return render(request, 'game/edit-game.html', {'games': games, 'game': game, 'form': form})
 
-    def post(self, request, game_id):
-        form = GameForm(request.POST)
-        game = Game.objects.get(pk=game_id)
+    def post(self, request):
+        form = GameForm(self.current_game, request.POST)
+        game = self.current_game
 
         if not form.is_valid():
             games = Games.objects.all()
             return render(request, 'game/edit-game.html', {'games': games, 'game': game, 'form': form})
 
         game.name = form.cleaned_data['name']
+        game.starting_place = form.cleaned_data['starting_place']
         game.save()
         return HttpResponseRedirect(reverse('events'))
 
 
 class DeleteGame(GameView):
-    def get(self, request, game_id):
-        game = Game.objects.get(pk=game_id)
-        return render(request, 'game/delete-game.html', {'game': game})
+    def get(self, request):
+        return render(request, 'game/delete-game.html', {'game': self.current_game})
 
-    def post(self, request, game_id):
-        game = Game.objects.get(pk=game_id)
+    def post(self, request):
+        game = self.current_game
         game.delete()
         messages.add_message(request, messages.INFO, 'Removed "{0}"'.format(game.name))
         request.session['game'] = 0

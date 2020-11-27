@@ -3,10 +3,10 @@
 {% block title %}Delete Game{% endblock %}
 
 {% block form %}
-<form action="{% url 'delete-game' game.pk %}" method="post">
+<form action="{% url 'delete-game' %}" method="post">
 	{% csrf_token %}
 	<p>Do you want to delete {{ game.name }}?</p>
 	<input type="submit" value="Delete">
-	<a href="{% url 'edit-game' game.pk %}">Cancel</a>
+	<a href="{% url 'edit-game' %}">Cancel</a>
 </form>
 {% endblock %}

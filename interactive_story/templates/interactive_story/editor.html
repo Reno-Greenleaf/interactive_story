@@ -16,7 +16,7 @@
 		{% endif %}
 
 		{% if current_game %}
-		<p><a href="{% url 'edit-game' current_game.pk %}">Edit {{ current_game.name }}</a></p>
+		<p><a href="{% url 'edit-game' %}">Edit {{ current_game.name }}</a></p>
 		{% endif %}
 
 		<ul>
