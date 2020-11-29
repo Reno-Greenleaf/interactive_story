@@ -20,7 +20,7 @@ from event.views import Events
 from command.views import AddCommand, EditCommand, DeleteCommand
 from game.views import CreateGame, DeleteGame, EditGame, SelectGame, Games
 from place.views import AddPlace, EditPlace, DeletePlace
-from player.views import Play
+from player.views import Play, Start, Continue
 
 urlpatterns = [
     path('', Games.as_view(), name='games'),
@@ -29,7 +29,6 @@ urlpatterns = [
     path('command/add', AddCommand.as_view(), name='add-command'),
     path('command/edit/<int:command_id>', EditCommand.as_view(), name='edit-command'),
     path('command/delete/<int:command_id>', DeleteCommand.as_view(), name='delete-command'),
-    path('play', Play.as_view(), name='play'),
     path('game/edit', EditGame.as_view(), name='edit-game'),
     path('game/create', CreateGame.as_view(), name='create-game'),
     path('game/delete', DeleteGame.as_view(), name='delete-game'),
@@ -37,4 +36,7 @@ urlpatterns = [
     path('place/add', AddPlace.as_view(), name='add-place'),
     path('place/edit/<int:place_id>', EditPlace.as_view(), name='edit-place'),
     path('place/delete/<int:place_id>', DeletePlace.as_view(), name='delete-place'),
+    path('play', Play.as_view(), name='play'),
+    path('start/<int:game_id>', Start.as_view(), name='start'),
+    path('continue/<int:session_id>', Continue.as_view(), name='continue'),
 ]

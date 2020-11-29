@@ -1,23 +1,22 @@
 from django.shortcuts import render
 from django.views import View
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from game.views import GameView
+from game.models import Game
 from player.forms import PlayForm
 from player.models import Session
 
 
 class Play(GameView):
     def get(self, request):
-        if 'session_id' in request.session:
-            session = self.current_game.sessions.get(pk=request.session['session_id'])
-        else:
-            session = self.current_game.sessions.create()
-            request.session['session_id'] = session.pk
+        session = Session.objects.get(pk=request.session['session_id'])
 
         output = 'Unclear.'
         form = PlayForm(request.GET)
         command_text = request.GET.get('command', '')
-        place = self.current_game.starting_place
-        command = self.current_game.commands.filter(text=command_text).first()
+        place = session.game.starting_place
+        command = session.game.commands.filter(text=command_text).first()
 
         if command:
             output = 'Requirements: '
@@ -28,3 +27,17 @@ class Play(GameView):
             output += ' Success: ' + command.success
 
         return render(request, 'player/player.html', {'form': form, 'output': output, 'place': place, 'session': session})
+
+
+class Start(View):
+    def get(self, request, game_id):
+        game = Game.objects.get(pk=game_id)
+        session = game.sessions.create()
+        request.session['session_id'] = session.pk
+        return HttpResponseRedirect(reverse('play'))
+
+
+class Continue(View):
+    def get(self, request, session_id):
+        request.session['session_id'] = session_id
+        return HttpResponseRedirect(reverse('play'))

@@ -18,10 +18,11 @@
 				{% if game.sessions.all %}
 				<ul>
 				{% for session in game.sessions.all %}
-					<li>{{ session }}
+					<li><a href="{% url 'continue' session.pk %}">{{ session }}</a>
 				{% endfor %}
 				</ul>
 				{% endif %}
+				<a href="{% url 'start' game.pk %}">New start</a>
 			</li>
 		{% endfor %}
 		</ul>
