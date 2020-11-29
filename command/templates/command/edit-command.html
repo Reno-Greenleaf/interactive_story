@@ -6,13 +6,15 @@
 <h3>Commands:</h3>
 <ul>
 	{% for command in commands %}
-	<li><a href="{% url 'edit-command' command.pk %}">{{ command.text }}</a></li>
+	<li><a href="{% url 'edit-command' command.pk %}">{{ command }}</a></li>
 	{% endfor %}
 </ul>
 
 <form action="{% url 'edit-command' command.pk %}" method="post">
 	{% csrf_token %}
 	{{ form }}
+	<p>Requirements:</p>
+	{{ requirements }}
 	<input type="submit" value="Save">
 	<a href="{% url 'delete-command' command.pk %}">Delete</a>
 </form>

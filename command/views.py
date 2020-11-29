@@ -6,14 +6,15 @@ from django.contrib import messages
 from game.views import GameView
 from game.models import Game
 from command.models import Command
-from command.forms import CommandForm
+from command.forms import CommandForm, RequirementsFormSet
 
 
 class AddCommand(GameView):
     def get(self, request):
         commands = self.current_game.commands.all()
         form = CommandForm(self.current_game)
-        return render(request, 'command/add-command.html', {'commands': commands, 'form': form})
+        requirements = RequirementsFormSet(form_kwargs={'game': self.current_game})
+        return render(request, 'command/add-command.html', {'commands': commands, 'form': form, 'requirements': requirements})
 
     def post(self, request):
         form = CommandForm(self.current_game, request.POST)
@@ -22,13 +23,18 @@ class AddCommand(GameView):
             commands = self.current_game.commands.all()
             return render(request, 'command/add-command.html', {'commands': commands, 'form': form})
 
-        self.current_game.commands.create(
+        command = self.current_game.commands.create(
             text=form.cleaned_data['text'],
-            output=form.cleaned_data['output'],
+            success=form.cleaned_data['success'],
             context = form.cleaned_data['context'],
             destination = form.cleaned_data['destination'],
-            requirement = form.cleaned_data['requirement'],
         )
+
+        requirements = RequirementsFormSet(request.POST, instance=command, form_kwargs={'game': self.current_game})
+
+        if requirements.is_valid():
+            requirements.save()
+
         return HttpResponseRedirect(reverse('add-command'))
 
 
@@ -36,8 +42,10 @@ class EditCommand(GameView):
     def get(self, request, command_id):
         commands = self.current_game.commands.all()
         command = self.current_game.commands.get(pk=command_id)
-        form = CommandForm(self.current_game, initial={'text': command.text, 'output': command.output, 'context': command.context, 'destination': command.destination, 'requirement': command.requirement})
-        return render(request, 'command/edit-command.html', {'commands': commands, 'command': command, 'form': form})
+        requirements = RequirementsFormSet(instance=command, form_kwargs={'game': self.current_game})
+        initial = {'text': command.text, 'output': command.output, 'context': command.context, 'destination': command.destination}
+        form = CommandForm(self.current_game, initial=initial)
+        return render(request, 'command/edit-command.html', {'commands': commands, 'command': command, 'form': form, 'requirements': requirements})
 
     def post(self, request, command_id):
         form = CommandForm(self.current_game, request.POST)
@@ -51,9 +59,14 @@ class EditCommand(GameView):
         command.output = form.cleaned_data['output']
         command.context = form.cleaned_data['context']
         command.destination = form.cleaned_data['destination']
-        command.requirement = form.cleaned_data['requirement']
         command.save()
-        return HttpResponseRedirect(reverse('add-command'))
+
+        requirements = RequirementsFormSet(request.POST, instance=command, form_kwargs={'game': self.current_game})
+
+        if requirements.is_valid():
+            requirements.save()
+
+        return HttpResponseRedirect(reverse('edit-command', kwargs={'command_id': command.pk}))
 
 
 class DeleteCommand(GameView):
