@@ -1,10 +1,18 @@
 from django.shortcuts import render
+from django.views import View
 from game.views import GameView
 from player.forms import PlayForm
+from player.models import Session
 
 
 class Play(GameView):
     def get(self, request):
+        if 'session_id' in request.session:
+            session = self.current_game.sessions.get(pk=request.session['session_id'])
+        else:
+            session = self.current_game.sessions.create()
+            request.session['session_id'] = session.pk
+
         output = 'Unclear.'
         form = PlayForm(request.GET)
         command_text = request.GET.get('command', '')
@@ -19,4 +27,4 @@ class Play(GameView):
 
             output += ' Success: ' + command.success
 
-        return render(request, 'player/player.html', {'form': form, 'output': output, 'place': place})
+        return render(request, 'player/player.html', {'form': form, 'output': output, 'place': place, 'session': session})
