@@ -3,10 +3,6 @@ from place.models import Place
 from game.models import Game
 
 
-class PlayForm(forms.Form):
-    command = forms.CharField()
-
-
 class GameForm(forms.Form):
     name = forms.CharField()
     starting_place = forms.ModelChoiceField(queryset=Place.objects.none(), required=False, empty_label='<Anywhere>')

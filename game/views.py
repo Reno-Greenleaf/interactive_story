@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from command.models import Command
-from game.forms import PlayForm, GameForm
+from game.forms import GameForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
@@ -19,25 +19,6 @@ class GameView(View):
             return HttpResponseRedirect(reverse('games'))
 
         return super().dispatch(request, *args, **kwargs)
-
-
-class Player(GameView):
-    def get(self, request):
-        output = 'Unclear.'
-        form = PlayForm(request.GET)
-        command_text = request.GET.get('command', '')
-        place = self.current_game.starting_place
-        command = self.current_game.commands.filter(text=command_text).first()
-
-        if command:
-            output = 'Requirements: '
-
-            for requirement in command.requirements.all():
-                output += ' ' + requirement.fail
-
-            output += ' Success: ' + command.success
-
-        return render(request, 'game/player.html', {'form': form, 'output': output, 'place': place})
 
 
 class CreateGame(View):
