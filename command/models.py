@@ -7,8 +7,8 @@ from place.models import Place
 class Command(models.Model):
     text = models.CharField(max_length=300, blank=False, null=False)
     success = models.TextField(default='')
-    destination = models.ForeignKey(Place, null=True, on_delete=models.CASCADE)
-    context = models.ForeignKey(Place, null=True, on_delete=models.CASCADE, related_name='commands')
+    destination = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL)
+    context = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL, related_name='commands')
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='commands')
 
     def __str__(self):
