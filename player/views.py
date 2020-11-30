@@ -19,6 +19,7 @@ class Play(GameView):
         command = session.game.commands.filter(text=command_text).first()
 
         if command:
+            session.happened.add(command.triggers)
             output = 'Requirements: '
 
             for requirement in command.requirements.all():

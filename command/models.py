@@ -10,6 +10,7 @@ class Command(models.Model):
     destination = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL)
     context = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL, related_name='commands')
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='commands')
+    triggers = models.ForeignKey(Event, null=True, on_delete=models.SET_NULL, related_name='commands')
 
     def __str__(self):
         if self.context:

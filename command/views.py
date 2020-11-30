@@ -28,6 +28,7 @@ class AddCommand(GameView):
             success=form.cleaned_data['success'],
             context = form.cleaned_data['context'],
             destination = form.cleaned_data['destination'],
+            triggers = form.cleaned_data['triggers'],
         )
 
         requirements = RequirementsFormSet(request.POST, instance=command, form_kwargs={'game': self.current_game})
@@ -43,7 +44,7 @@ class EditCommand(GameView):
         commands = self.current_game.commands.all()
         command = self.current_game.commands.get(pk=command_id)
         requirements = RequirementsFormSet(instance=command, form_kwargs={'game': self.current_game})
-        initial = {'text': command.text, 'output': command.output, 'context': command.context, 'destination': command.destination}
+        initial = {'text': command.text, 'success': command.success, 'context': command.context, 'destination': command.destination, 'triggers': command.triggers}
         form = CommandForm(self.current_game, initial=initial)
         return render(request, 'command/edit-command.html', {'commands': commands, 'command': command, 'form': form, 'requirements': requirements})
 
@@ -56,9 +57,10 @@ class EditCommand(GameView):
             return render(request, 'command/edit-command.html', {'commands': commands, 'command': command, 'form': form})
 
         command.text = form.cleaned_data['text']
-        command.output = form.cleaned_data['output']
+        command.success = form.cleaned_data['success']
         command.context = form.cleaned_data['context']
         command.destination = form.cleaned_data['destination']
+        command.triggers = form.cleaned_data['triggers']
         command.save()
 
         requirements = RequirementsFormSet(request.POST, instance=command, form_kwargs={'game': self.current_game})

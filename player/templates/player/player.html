@@ -10,6 +10,14 @@
 		{% if place %}
 		<p>{{ place.description }}</p>
 		{% endif %}
+		{% if session.happened.all %}
+		<p>Happened events:</p>
+		<ul>
+		{% for event in session.happened.all %}
+		<li>{{ event }}
+		{% endfor %}
+		</ul>
+		{% endif %}
 		<form method="get" action="{% url 'play' %}">
 			{% csrf_token %}
 			{{ form }}
