@@ -23,3 +23,4 @@ class Requirement(models.Model):
     command = models.ForeignKey(Command, on_delete=models.CASCADE, related_name='requirements')
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     fail = models.TextField(default='')
+    priority = models.PositiveSmallIntegerField(default=0)

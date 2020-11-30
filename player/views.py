@@ -19,13 +19,13 @@ class Play(GameView):
         command = session.game.commands.filter(text=command_text).first()
 
         if command:
-            session.happened.add(command.triggers)
-            output = 'Requirements: '
+            requirement = command.requirements.exclude(event__in=session.happened.all()).order_by('-priority').first()
 
-            for requirement in command.requirements.all():
-                output += ' ' + requirement.fail
-
-            output += ' Success: ' + command.success
+            if requirement:
+                output = requirement.fail
+            else:
+                session.happened.add(command.triggers)
+                output = command.success
 
         return render(request, 'player/player.html', {'form': form, 'output': output, 'place': place, 'session': session})
 
