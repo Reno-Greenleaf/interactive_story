@@ -1,14 +1,17 @@
-from django.shortcuts import render
-from django.views import View
+"""Player views."""
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
-from game.views import GameView
+from django.views import View
+
 from game.models import Game
 from player.forms import PlayForm
 from player.models import Session
 
 
-class Play(GameView):
+class Play(View):
+    """Run current session."""
+
     def get(self, request):
         session = Session.objects.get(pk=request.session['session_id'])
 
@@ -27,10 +30,19 @@ class Play(GameView):
                 session.happened.add(command.triggers)
                 output = command.success
 
-        return render(request, 'player/player.html', {'form': form, 'output': output, 'place': place, 'session': session})
+        context = {
+            'form': form,
+            'output': output,
+            'place': place,
+            'session': session,
+        }
+
+        return render(request, 'player/player.html', context)
 
 
 class Start(View):
+    """Start new play session."""
+
     def get(self, request, game_id):
         game = Game.objects.get(pk=game_id)
         session = game.sessions.create()
@@ -39,6 +51,8 @@ class Start(View):
 
 
 class Continue(View):
+    """Continue existing play session."""
+
     def get(self, request, session_id):
         request.session['session_id'] = session_id
         return HttpResponseRedirect(reverse('play'))

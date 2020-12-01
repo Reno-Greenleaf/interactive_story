@@ -1,14 +1,16 @@
+"""View(s) to edit events."""
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views import View
-from django.contrib import messages
-from game.views import GameView
-from event.models import Event
+
 from event.forms import EventsForm
+from game.views import GameView
 
 
 class Events(GameView):
+    """Edit events form."""
+
     http_method_names = ['get', 'post']
 
     def get(self, request):
@@ -19,7 +21,7 @@ class Events(GameView):
             names.append(event.name)
 
         context = {
-            'form': EventsForm(initial={'events': '\n'.join(names)})
+            'form': EventsForm(initial={'events': '\n'.join(names)}),
         }
         return render(request, 'event/events.html', context)
 
@@ -30,22 +32,30 @@ class Events(GameView):
         if not form.is_valid():
             return render(request, 'event/events.html', {'form': form})
 
-        lines = form.cleaned_data['events']
-
-        for line in lines:
+        for line in form.cleaned_data['events']:
             event, created = self.current_game.events.get_or_create(name=line)
             event.chronology = line_number
             event.save()
 
             if created:
-                messages.add_message(request, messages.INFO, 'Added "{0}"'.format(line))
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    'Added "{0}"'.format(line),
+                )
 
             line_number += 1
 
-        to_delete = self.current_game.events.exclude(name__in=lines)
+        to_delete = self.current_game.events.exclude(
+            name__in=form.cleaned_data['events'],
+        )
 
         for event in to_delete:
             event.delete()
-            messages.add_message(request, messages.INFO, 'Removed "{0}"'.format(event.name))
+            messages.add_message(
+                request,
+                messages.INFO,
+                'Removed "{0}"'.format(event.name),
+            )
 
         return HttpResponseRedirect(reverse('events'))
