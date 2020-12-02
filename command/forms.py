@@ -1,15 +1,29 @@
+"""Forms for commands."""
 from django import forms
-from place.models import Place
-from event.models import Event
+
 from command.models import Command, Requirement
+from event.models import Event
+from place.models import Place
 
 
 class CommandForm(forms.Form):
     text = forms.CharField()
     success = forms.CharField(widget=forms.Textarea)
-    context = forms.ModelChoiceField(Place.objects.none(), empty_label='<Any>', required=False)
-    destination = forms.ModelChoiceField(Place.objects.none(), empty_label='<Same>', required=False)
-    triggers = forms.ModelChoiceField(Event.objects.none(), empty_label='<Nothing>', required=False)
+    context = forms.ModelChoiceField(
+        Place.objects.none(),
+        empty_label='<Any>',
+        required=False,
+    )
+    destination = forms.ModelChoiceField(
+        Place.objects.none(),
+        empty_label='<Same>',
+        required=False,
+    )
+    triggers = forms.ModelChoiceField(
+        Event.objects.none(),
+        empty_label='<Nothing>',
+        required=False,
+    )
 
     def __init__(self, game, *args, **kwargs):
         super().__init__(*args, **kwargs)
