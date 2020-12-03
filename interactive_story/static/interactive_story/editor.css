@@ -1,0 +1,6 @@
+.requirement * {
+	display: inline;
+}
+.requirement textarea {
+	height: 3em;
+}
