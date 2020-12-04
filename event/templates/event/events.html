@@ -3,9 +3,12 @@
 {% block title %}Events{% endblock %}
 
 {% block form %}
-<form action="{% url 'events' %}" method="post">
+<form action="{% url 'events' %}" method="post" autocomplete="off">
 	{% csrf_token %}
-	{{ form }}
+	{{ formset.management_form }}
+	{% for form in formset %}
+	<div class="event">{{ form }}</div>
+	{% endfor %}
 	<input type="submit" value="Save">
 </form>
 {% endblock %}

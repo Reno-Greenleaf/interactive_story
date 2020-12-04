@@ -1,3 +1,3 @@
-$('.requirement [type="checkbox"]').click(function (e) {
+$('.requirement [type="checkbox"], .event [type="checkbox"]').click(function (e) {
 	$(this).parent().hide();
 });

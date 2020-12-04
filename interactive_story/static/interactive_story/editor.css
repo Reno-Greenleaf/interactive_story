@@ -1,6 +1,12 @@
-.requirement * {
+.requirement *, .event * {
 	display: inline;
 }
+
 .requirement textarea {
 	height: 3em;
+}
+
+.event {
+	border: 1px black solid;
+	margin: 1em;
 }

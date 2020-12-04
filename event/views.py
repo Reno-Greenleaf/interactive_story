@@ -1,10 +1,9 @@
 """View(s) to edit events."""
-from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from event.forms import EventsForm
+from event.forms import EventsFormSet
 from game.views import GameView
 
 
@@ -14,48 +13,16 @@ class Events(GameView):
     http_method_names = ['get', 'post']
 
     def get(self, request):
-        events = self.current_game.events.order_by('chronology').all()
-        names = []
+        formset = EventsFormSet(instance=self.current_game)
 
-        for event in events:
-            names.append(event.name)
-
-        context = {
-            'form': EventsForm(initial={'events': '\n'.join(names)}),
-        }
+        context = {'formset': formset}
         return render(request, 'event/events.html', context)
 
     def post(self, request):
-        line_number = 1
-        form = EventsForm(request.POST)
+        formset = EventsFormSet(request.POST, instance=self.current_game)
 
-        if not form.is_valid():
-            return render(request, 'event/events.html', {'form': form})
+        if formset.is_valid():
+            formset.save()
+            return HttpResponseRedirect(reverse('events'))
 
-        for line in form.cleaned_data['events']:
-            event, created = self.current_game.events.get_or_create(name=line)
-            event.chronology = line_number
-            event.save()
-
-            if created:
-                messages.add_message(
-                    request,
-                    messages.INFO,
-                    'Added "{0}"'.format(line),
-                )
-
-            line_number += 1
-
-        to_delete = self.current_game.events.exclude(
-            name__in=form.cleaned_data['events'],
-        )
-
-        for event in to_delete:
-            event.delete()
-            messages.add_message(
-                request,
-                messages.INFO,
-                'Removed "{0}"'.format(event.name),
-            )
-
-        return HttpResponseRedirect(reverse('events'))
+        return render(request, 'event/events.html', {'formset': formset})
