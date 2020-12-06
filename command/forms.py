@@ -7,6 +7,8 @@ from place.models import Place
 
 
 class CommandForm(forms.Form):
+    """Form to edit/add commands."""
+
     text = forms.CharField()
     success = forms.CharField(widget=forms.Textarea)
     context = forms.ModelChoiceField(
@@ -26,6 +28,13 @@ class CommandForm(forms.Form):
     )
 
     def __init__(self, game, *args, **kwargs):
+        """Render selects based on current game.
+
+        Args:
+            game: Game model instance
+            *args: default arguments of the form
+            **kwargs: default keyword arguments of the form
+        """
         super().__init__(*args, **kwargs)
         self.fields['context'].queryset = game.places.all()
         self.fields['destination'].queryset = game.places.all()
@@ -33,13 +42,30 @@ class CommandForm(forms.Form):
 
 
 class RequirementForm(forms.ModelForm):
-    class Meta:
+    """A case when a command fails."""
+
+    class Meta(object):
+        """Additional settings."""
+
         model = Requirement
         exclude = ()
 
     def __init__(self, game, *args, **kwargs):
+        """Render selects based on current game.
+
+        Args:
+            game: Game model instance
+            *args: default arguments of the form
+            **kwargs: default keyword arguments of the form
+        """
         super().__init__(*args, **kwargs)
         self.fields['event'].queryset = game.events.all()
 
 
-RequirementsFormSet = forms.inlineformset_factory(Command, Requirement, exclude=(), extra=1, form=RequirementForm)
+RequirementsFormSet = forms.inlineformset_factory(
+    Command,
+    Requirement,
+    exclude=(),
+    extra=1,
+    form=RequirementForm,
+)

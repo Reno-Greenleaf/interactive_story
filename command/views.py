@@ -13,7 +13,17 @@ FORM_KEY = 'form'
 
 
 class AddCommand(GameView):
+    """Add new command."""
+
     def get(self, request):
+        """Render command form.
+
+        Args:
+            request: HttpRequest instance
+
+        Returns:
+            HttpResponse
+        """
         commands = self.current_game.commands.all()
         form = CommandForm(self.current_game)
         requirements = RequirementsFormSet(
@@ -30,6 +40,14 @@ class AddCommand(GameView):
         )
 
     def post(self, request):
+        """Create a command.
+
+        Args:
+            request: HttpRequest instance
+
+        Returns:
+            HttpResponseRedirect
+        """
         form = CommandForm(self.current_game, request.POST)
 
         if not form.is_valid():
@@ -61,7 +79,18 @@ class AddCommand(GameView):
 
 
 class EditCommand(GameView):
+    """Edit existing command."""
+
     def get(self, request, command_id):
+        """Render edit form.
+
+        Args:
+            request: HttpRequest instance
+            command_id: integer
+
+        Returns:
+            HttpResponse
+        """
         commands = self.current_game.commands.all()
         command = self.current_game.commands.get(pk=command_id)
         requirements = RequirementsFormSet(
@@ -88,6 +117,15 @@ class EditCommand(GameView):
         )
 
     def post(self, request, command_id):
+        """Edit command.
+
+        Args:
+            request: HttpRequest instance
+            command_id: integer
+
+        Returns:
+            HttpResponseRedirect
+        """
         form = CommandForm(self.current_game, request.POST)
         command = self.current_game.commands.get(pk=command_id)
 
@@ -121,7 +159,18 @@ class EditCommand(GameView):
 
 
 class DeleteCommand(GameView):
+    """Delete a command."""
+
     def get(self, request, command_id):
+        """Show confirmation form.
+
+        Args:
+            request: HttpRequest instance
+            command_id: integer
+
+        Returns:
+            HttpResponse
+        """
         command = self.current_game.commands.get(pk=command_id)
         return render(
             request,
@@ -130,6 +179,15 @@ class DeleteCommand(GameView):
         )
 
     def post(self, request, command_id):
+        """Do delete.
+
+        Args:
+            request: HttpRequest instance
+            command_id: integer
+
+        Returns:
+            HttpResponseRedirect instance
+        """
         command = self.current_game.commands.get(pk=command_id)
         command.delete()
         messages.add_message(
