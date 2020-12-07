@@ -5,4 +5,4 @@ from django import forms
 class PlayForm(forms.Form):
     """Main mean of interaction for a player."""
 
-    command = forms.CharField()
+    command = forms.CharField(required=False)

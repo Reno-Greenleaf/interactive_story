@@ -10,7 +10,7 @@ class CommandForm(forms.Form):
     """Form to edit/add commands."""
 
     text = forms.CharField()
-    success = forms.CharField(widget=forms.Textarea)
+    success = forms.CharField(widget=forms.Textarea, required=False)
     context = forms.ModelChoiceField(
         Place.objects.none(),
         empty_label='<Any>',
