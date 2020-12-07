@@ -3,11 +3,17 @@ from django.db import models
 
 from event.models import Event
 from game.models import Game
+from place.models import Place
 
 
 class Session(models.Model):
     game = models.ForeignKey(
         Game,
+        on_delete=models.CASCADE,
+        related_name='sessions',
+    )
+    place = models.ForeignKey(
+        Place,
         on_delete=models.CASCADE,
         related_name='sessions',
     )

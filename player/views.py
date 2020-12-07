@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
+from django.contrib import messages
 
 from game.models import Game
 from player.forms import PlayForm
@@ -18,8 +19,7 @@ class Play(View):
         output = 'Unclear.'
         form = PlayForm(request.GET)
         command_text = request.GET.get('command', '')
-        place = session.game.starting_place
-        command = session.game.commands.filter(text=command_text).first()
+        command = session.place.commands.filter(text=command_text).first()
 
         if command:
             requirement = command.requirements.exclude(event__in=session.happened.all()).order_by('-priority').first()
@@ -30,10 +30,13 @@ class Play(View):
                 session.happened.add(command.triggers)
                 output = command.success
 
+            if command.destination:
+                session.place = command.destination
+                session.save()
+
         context = {
             'form': form,
             'output': output,
-            'place': place,
             'session': session,
         }
 
@@ -45,7 +48,16 @@ class Start(View):
 
     def get(self, request, game_id):
         game = Game.objects.get(pk=game_id)
-        session = game.sessions.create()
+
+        if not game.starting_place:
+            messages.add_message(
+                request,
+                messages.INFO,
+                "There's no place to start.",
+            )
+            return HttpResponseRedirect(reverse('games'))
+
+        session = game.sessions.create(place=game.starting_place)
         request.session['session_id'] = session.pk
         return HttpResponseRedirect(reverse('play'))
 
