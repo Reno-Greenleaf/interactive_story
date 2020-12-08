@@ -17,7 +17,6 @@ class Play(View):
         session = Session.objects.get(pk=request.session['session_id'])
 
         output = 'Unclear.'
-        form = PlayForm(request.GET)
         command_text = request.GET.get('command', '')
         command = session.place.commands.filter(text=command_text).first()
 
@@ -30,12 +29,12 @@ class Play(View):
                 session.happened.add(command.triggers)
                 output = command.success
 
-            if command.destination:
-                session.place = command.destination
-                session.save()
+                if command.destination:
+                    session.place = command.destination
+                    session.save()
 
         context = {
-            'form': form,
+            'form': PlayForm(),
             'output': output,
             'session': session,
         }

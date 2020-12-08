@@ -5,8 +5,14 @@
 {% block form %}
 <h3>Commands:</h3>
 <ul>
-	{% for command in commands %}
-	<li><a href="{% url 'edit-command' command.pk %}">{{ command }}</a></li>
+	{% for place in current_game.places.all %}
+	<li>{{ place.name }}
+		<ul>
+		{% for command in place.commands.all %}
+		<li><a href="{% url 'edit-command' command.pk %}">{{ command.text }}</a></li>
+		{% endfor %}
+		</ul>
+	</li>
 	{% endfor %}
 </ul>
 

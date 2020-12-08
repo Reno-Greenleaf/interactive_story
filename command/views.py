@@ -24,7 +24,7 @@ class AddCommand(GameView):
         Returns:
             HttpResponse
         """
-        commands = self.current_game.commands.all()
+        commands = self.current_game.commands.order_by('context').all()
         form = CommandForm(self.current_game)
         requirements = RequirementsFormSet(
             form_kwargs={GAME_KEY: self.current_game},
@@ -51,7 +51,7 @@ class AddCommand(GameView):
         form = CommandForm(self.current_game, request.POST)
 
         if not form.is_valid():
-            commands = self.current_game.commands.all()
+            commands = self.current_game.commands.order_by('context').all()
             return render(
                 request,
                 'command/add-command.html',

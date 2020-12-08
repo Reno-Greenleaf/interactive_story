@@ -7,7 +7,7 @@
 		<ul>
 			<li><a href="{% url 'games' %}">Games</a>
 		</ul>
-		<p>{{ session.place.description }}</p>
+		<p>You're in {{ session.place.name }}.</p>
 		{% if session.happened.all %}
 		<p>Happened events:</p>
 		<ul>
