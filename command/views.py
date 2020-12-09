@@ -24,7 +24,7 @@ class AddCommand(GameView):
         Returns:
             HttpResponse
         """
-        commands = self.current_game.commands.order_by('context').all()
+        global_commands = self.current_game.commands.filter(context=None).all()
         form = CommandForm(self.current_game)
         requirements = RequirementsFormSet(
             form_kwargs={GAME_KEY: self.current_game},
@@ -33,9 +33,9 @@ class AddCommand(GameView):
             request,
             'command/add-command.html',
             {
-                COMMANDS_KEY: commands,
                 FORM_KEY: form,
                 'requirements': requirements,
+                'global_commands': global_commands,
             },
         )
 
@@ -91,7 +91,7 @@ class EditCommand(GameView):
         Returns:
             HttpResponse
         """
-        commands = self.current_game.commands.all()
+        global_commands = self.current_game.commands.filter(context=None).all()
         command = self.current_game.commands.get(pk=command_id)
         requirements = RequirementsFormSet(
             instance=command,
@@ -109,7 +109,7 @@ class EditCommand(GameView):
             request,
             'command/edit-command.html',
             {
-                COMMANDS_KEY: commands,
+                'global_commands': global_commands,
                 'command': command,
                 FORM_KEY: form,
                 'requirements': requirements,

@@ -4,6 +4,13 @@
 
 {% block form %}
 <h3>Commands:</h3>
+{% if global_commands %}
+<ul>
+	{% for command in global_commands %}
+	<li><a href="{% url 'edit-command' command.pk %}">{{ command.text }}</a></li>
+	{% endfor %}
+</ul>
+{% endif %}
 <ul>
 	{% for place in current_game.places.all %}
 	<li>{{ place.name }}
