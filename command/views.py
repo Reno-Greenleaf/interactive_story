@@ -25,7 +25,10 @@ class AddCommand(GameView):
             HttpResponse
         """
         global_commands = self.current_game.commands.filter(context=None).all()
-        form = CommandForm(self.current_game)
+        initial = {
+            'context': request.GET.get('context', ''),
+        }
+        form = CommandForm(self.current_game, initial=initial)
         requirements = RequirementsFormSet(
             form_kwargs={GAME_KEY: self.current_game},
         )
