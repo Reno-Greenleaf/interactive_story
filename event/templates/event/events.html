@@ -6,9 +6,11 @@
 <form action="{% url 'events' %}" method="post" autocomplete="off">
 	{% csrf_token %}
 	{{ formset.management_form }}
-	{% for form in formset %}
-	<div class="event">{{ form }}</div>
-	{% endfor %}
+	<ul class="sortable">
+		{% for form in formset %}
+		<li class="event">{{ form }}</li>
+		{% endfor %}
+	</ul>
 	<input type="submit" value="Save">
 </form>
 {% endblock %}

@@ -28,9 +28,11 @@
 	{{ form }}
 	<p>Requirements:</p>
 	{{ requirements.management_form }}
-	{% for requirement in requirements %}
-	<div class="requirement" style="border: 1px black solid; margin: 1em;">{{ requirement }}</div>
-	{% endfor %}
+	<ul class="sortable">
+		{% for requirement in requirements %}
+		<li class="requirement" style="border: 1px black solid; margin: 1em;">{{ requirement }}</li>
+		{% endfor %}
+	</ul>
 	<input type="submit" value="Add">
 </form>
 {% endblock %}

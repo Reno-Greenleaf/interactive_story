@@ -15,14 +15,12 @@
 		<ul>
 		{% for game in games %}
 			<li><a href="{% url 'select-game' game.pk %}">{{ game.name }}</a>
-				{% if game.sessions.all %}
 				<ul>
 				{% for session in game.sessions.all %}
 					<li><a href="{% url 'continue' session.pk %}">{{ session }}</a>
 				{% endfor %}
+					<li><a href="{% url 'start' game.pk %}">New start</a>
 				</ul>
-				{% endif %}
-				<a href="{% url 'start' game.pk %}">New start</a>
 			</li>
 		{% endfor %}
 		</ul>

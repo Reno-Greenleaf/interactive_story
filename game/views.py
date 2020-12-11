@@ -16,7 +16,11 @@ class GameView(View):
         try:
             self.current_game = Game.objects.get(pk=game_id)
         except Game.DoesNotExist:
-            messages.add_message(request, messages.INFO, "A game isn't selected.")
+            messages.add_message(
+                request,
+                messages.INFO,
+                "A game isn't selected.",
+            )
             return HttpResponseRedirect(reverse('games'))
 
         return super().dispatch(request, *args, **kwargs)
