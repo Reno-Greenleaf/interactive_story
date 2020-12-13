@@ -26,6 +26,7 @@ class Event(models.Model):
                 name='unique_event',
             ),
         ]
+        ordering = ('chronology',)
 
     def __str__(self):
         """Event representation.

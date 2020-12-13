@@ -1,4 +1,5 @@
 """View(s) to edit events."""
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse

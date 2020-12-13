@@ -6,7 +6,7 @@
 <form action="{% url 'events' %}" method="post" autocomplete="off">
 	{% csrf_token %}
 	{{ formset.management_form }}
-	<ul class="sortable">
+	<ul class="plot">
 		{% for form in formset %}
 		<li class="event">{{ form }}</li>
 		{% endfor %}
