@@ -80,12 +80,11 @@ class AddCommand(GameView):
         else:
             return render(
                 request,
-                'command/edit-command.html',
+                'command/add-command.html',
                 {
-                    'global_commands': [],
-                    'command': command,
                     FORM_KEY: form,
                     'requirements': requirements,
+                    'global_commands': self.current_game.commands.filter(context=None).all(),
                 },
             )
 
@@ -171,7 +170,7 @@ class EditCommand(GameView):
                 request,
                 'command/edit-command.html',
                 {
-                    'global_commands': [],
+                    'global_commands': self.current_game.commands.filter(context=None).all(),
                     'command': command,
                     FORM_KEY: form,
                     'requirements': requirements,
