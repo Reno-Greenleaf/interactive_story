@@ -77,6 +77,17 @@ class AddCommand(GameView):
 
         if requirements.is_valid():
             requirements.save()
+        else:
+            return render(
+                request,
+                'command/edit-command.html',
+                {
+                    'global_commands': [],
+                    'command': command,
+                    FORM_KEY: form,
+                    'requirements': requirements,
+                },
+            )
 
         return HttpResponseRedirect(reverse('add-command'))
 
@@ -155,6 +166,17 @@ class EditCommand(GameView):
 
         if requirements.is_valid():
             requirements.save()
+        else:
+            return render(
+                request,
+                'command/edit-command.html',
+                {
+                    'global_commands': [],
+                    'command': command,
+                    FORM_KEY: form,
+                    'requirements': requirements,
+                },
+            )
 
         return HttpResponseRedirect(
             reverse('edit-command', kwargs={'command_id': command.pk}),

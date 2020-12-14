@@ -49,6 +49,9 @@ class Command(models.Model):
 class Requirement(models.Model):
     """Condition under which a command succeeds."""
 
+    class Meta:
+        ordering = ('-priority',)
+
     command = models.ForeignKey(
         Command,
         on_delete=models.CASCADE,

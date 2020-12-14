@@ -61,6 +61,15 @@ class RequirementForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['event'].queryset = game.events.all()
 
+    def has_changed(self):
+        """Marely reordering a form doesn't mean it should be saved."""
+        ignore = not self.instance.pk and not self['event'].value() and not self['fail'].value()
+
+        if ignore:
+            return False
+
+        return super().has_changed()
+
 
 RequirementsFormSet = forms.inlineformset_factory(
     Command,
