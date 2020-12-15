@@ -1,0 +1,16 @@
+<html>
+	<body>
+		{% if messages %}
+		<ul class="messages">
+			{% for message in messages %}
+			<li>{{ message }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+		<form method="post" action="{% url 'login' %}">
+		{% csrf_token %}
+		{{ form }}
+		<input type="submit" value="Login">
+		</form>
+	</body>
+</html>
