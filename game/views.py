@@ -10,6 +10,7 @@ from game.models import Game
 
 
 class GameView(View):
+    """Base view for editor views."""
     def dispatch(self, request, *args, **kwargs):
         game_id = request.session.get('game', 0)
 
@@ -19,7 +20,7 @@ class GameView(View):
             messages.add_message(
                 request,
                 messages.INFO,
-                "A game isn't selected.",
+                "A game isn't selected or you aren't its author.",
             )
             return HttpResponseRedirect(reverse('games'))
 
@@ -39,7 +40,10 @@ class CreateGame(View):
             games = Game.objects.all()
             return render(request, 'game/create-game.html', {'form': form, 'games': games})
 
-        game = Game.objects.create(name=form.cleaned_data['name'])
+        game = Game.objects.create(
+            name=form.cleaned_data['name'],
+            author=request.user,
+        )
         request.session['game'] = game.pk
         messages.add_message(
             request,
@@ -103,7 +107,16 @@ class DeleteGame(GameView):
 
 class SelectGame(View):
     def get(self, request, game_id):
-        game = Game.objects.get(pk=game_id)
+        try:
+            game = request.user.games.get(pk=game_id)
+        except Game.DoesNotExist:
+            messages.add_message(
+                request,
+                messages.INFO,
+                "You aren't author.",
+            )
+            return HttpResponseRedirect(reverse('games'))
+
         request.session['game'] = game.pk
         messages.add_message(
             request,
