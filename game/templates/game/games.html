@@ -1,32 +1,23 @@
-<html>
-	<head>
-		<title>Games</title>
-	</head>
-	<body>
-		{% if messages %}
-		<ul class="messages">
-			{% for message in messages %}
-			<li>{{ message }}
-			{% endfor %}
-		</ul>
-		{% endif %}
+{% extends 'interactive_story/common.html' %}
 
-		{% if games %}
+{% block title %}Games{% endblock %}
+
+{% block content %}
+{% if games %}
+<ul>
+{% for game in games %}
+	<li><a href="{% url 'select-game' game.pk %}">{{ game.name }} by {{ game.author }}</a>
 		<ul>
-		{% for game in games %}
-			<li><a href="{% url 'select-game' game.pk %}">{{ game.name }} by {{ game.author }}</a>
-				<ul>
-				{% for session in game.sessions.all %}
-					<li><a href="{% url 'continue' session.pk %}">{{ session }}</a>
-				{% endfor %}
-					<li><a href="{% url 'start' game.pk %}">New start</a>
-				</ul>
-			</li>
+		{% for session in game.sessions.all %}
+			<li><a href="{% url 'continue' session.pk %}">{{ session }}</a>
 		{% endfor %}
+			<li><a href="{% url 'start' game.pk %}">New start</a>
 		</ul>
-		{% else %}
-		<p>There're no games.</p>
-		{% endif %}
-		<p><a href="{% url 'create-game' %}">Create new one.</a></p>
-	</body>
-</html>
+	</li>
+{% endfor %}
+</ul>
+{% else %}
+<p>There're no games.</p>
+{% endif %}
+<p><a href="{% url 'create-game' %}">Create new one.</a></p>
+{% endblock %}

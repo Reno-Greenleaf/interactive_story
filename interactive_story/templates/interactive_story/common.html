@@ -1,0 +1,37 @@
+{% load static %}<html>
+	<head>
+		<title>{% block title %}Interactive Story{% endblock %}</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'interactive_story/editor.css' %}">
+		<script src="{% static 'interactive_story/jquery-3.5.1.js' %}"></script>
+		<script src="{% static 'interactive_story/jquery-ui-1.12.1.custom/jquery-ui.js' %}"></script>
+	</head>
+	<body>
+		<p><a href="{% url 'games' %}">Main page</a></p>
+		{% block messages %}
+		{% if messages %}
+		<ul class="messages">
+			{% for message in messages %}
+			<li>{{ message }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+		{% endblock %}
+		<ul>
+			{% if session %}
+			<li>Playing: {{ session }}
+			{% endif %}
+			{% if current_game %}
+			<li>Editing: {{ current_game }}
+			{% endif %}
+		</ul>
+		<div>
+		{% if user.is_authenticated %}
+		{{ user.username }} <a href="{% url 'logout' %}">Log out</a>
+		{% else %}
+		<a href="{% url 'login' %}">Log in</a>
+		{% endif %}
+		</div>
+		{% block content %}There's nothing here. Go away.{% endblock %}
+	</body>
+</html>

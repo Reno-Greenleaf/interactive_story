@@ -1,21 +1,11 @@
-<html>
-	<body>
-		{% if user.is_authenticated %}
-		{{ user }} (<a href="{% url 'logout' %}">logout</a>)
-		{% else %}
-		Anonymous
-		{% endif %}
-		{% if messages %}
-		<ul class="messages">
-			{% for message in messages %}
-			<li>{{ message }}</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
-		<form method="post" action="{% url 'login' %}">
-		{% csrf_token %}
-		{{ form }}
-		<input type="submit" value="Login">
-		</form>
-	</body>
-</html>
+{% extends 'interactive_story/common.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+{{ form }}
+<input type="submit" value="Login">
+</form>
+{% endblock %}

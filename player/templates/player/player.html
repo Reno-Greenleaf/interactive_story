@@ -1,26 +1,21 @@
-<html>
-	<head>
-		<title>{{ session.game }}</title>
-	</head>
-	<body>
-		<div>{{ session }}</div>
-		<ul>
-			<li><a href="{% url 'games' %}">Games</a>
-		</ul>
-		<p>You're in {{ session.place.name }}.</p>
-		{% if session.happened.all %}
-		<p>Happened events:</p>
-		<ul>
-		{% for event in session.happened.all %}
-		<li>{{ event }}
-		{% endfor %}
-		</ul>
-		{% endif %}
-		<form method="get" action="{% url 'play' %}">
-			{% csrf_token %}
-			{{ form }}
-			<input type="submit" value=">">
-			<p>{{ output }}</p>
-		</form>
-	</body>
-</html>
+{% extends 'interactive_story/common.html' %}
+
+{% block title %}{{ session.game }}{% endblock %}
+
+{% block content %}
+<p>You're in {{ session.place.name }}.</p>
+{% if session.happened.all %}
+<p>Happened events:</p>
+<ul>
+{% for event in session.happened.all %}
+<li>{{ event }}
+{% endfor %}
+</ul>
+{% endif %}
+<form method="get" action="{% url 'play' %}">
+	{% csrf_token %}
+	{{ form }}
+	<input type="submit" value=">">
+	<p>{{ output }}</p>
+</form>
+{% endblock %}

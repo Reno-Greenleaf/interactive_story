@@ -1,38 +1,18 @@
-{% load static %}<html>
-	<head>
-		<title>{% block title %}Editor{% endblock %}</title>
-		<link rel="stylesheet" type="text/css" href="{% static 'event/style.css' %}">
-		<link rel="stylesheet" type="text/css" href="{% static 'interactive_story/editor.css' %}">
-		<script src="{% static 'interactive_story/jquery-3.5.1.js' %}"></script>
-		<script src="{% static 'interactive_story/jquery-ui-1.12.1.custom/jquery-ui.js' %}"></script>
-	</head>
-	<body>
-		{% if current_game %}
-		<h1>Working on {{ current_game.name }}</h1>
-		{% endif %}
-		{% if messages %}
-		<ul class="messages">
-			{% for message in messages %}
-			<li>{{ message }}</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
+{% extends 'interactive_story/common.html' %}
+{% load static %}
 
-		{% if current_game %}
-		<p><a href="{% url 'edit-game' %}">Edit {{ current_game.name }}</a></p>
-		{% endif %}
+{% block title %}{% endblock %}
 
-		<ul>
-			{% block menu %}
-			<li><a href="{% url 'games' %}">Games</a>
-			<li><a href="{% url 'add-command' %}">Add command</a>
-			<li><a href="{% url 'add-place' %}">Add place</a>
-			<li><a href="{% url 'events' %}">Events</a>
-			<li><a href="{% url 'create-game' %}">Create Game</a>
-			{% endblock %}
-		</ul>
+{% block content %}
+<ul>
+	{% if current_game %}
+	<li><a href="{% url 'edit-game' %}">Main properties</a>
+	{% endif %}
+	<li><a href="{% url 'add-command' %}">Add command</a>
+	<li><a href="{% url 'add-place' %}">Add place</a>
+	<li><a href="{% url 'events' %}">Events</a>
+</ul>
 
-		{% block form %}{% endblock %}
-		<script src="{% static 'interactive_story/editor.js' %}"></script>
-	</body>
-</html>
+{% block form %}{% endblock %}
+<script src="{% static 'interactive_story/editor.js' %}"></script>
+{% endblock %}
