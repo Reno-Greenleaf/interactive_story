@@ -8,6 +8,17 @@ from django.contrib.auth import authenticate, login, logout
 from custom_user.forms import LoginForm
 
 
+class UserView(View):
+    """Most views are meant for authenticated user."""
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+
+        messages.add_message(request, messages.INFO, 'You need to be authenticated to do it.')
+        return HttpResponseRedirect(reverse('login'))
+
+
 class Login(View):
     def get(self, request):
         return render(request, 'custom_user/login.html', {'form': LoginForm()})
@@ -31,7 +42,7 @@ class Login(View):
         return render(request, 'custom_user/login.html', {'form': form})
 
 
-class Logout(View):
+class Logout(UserView):
     def get(self, request):
         logout(request)
-        return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect(reverse('games'))

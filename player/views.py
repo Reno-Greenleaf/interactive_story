@@ -2,15 +2,15 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views import View
 from django.contrib import messages
 
 from game.models import Game
 from player.forms import PlayForm
 from player.models import Session
+from custom_user.views import UserView
 
 
-class Play(View):
+class Play(UserView):
     """Run current session."""
 
     def get(self, request):
@@ -42,7 +42,7 @@ class Play(View):
         return render(request, 'player/player.html', context)
 
 
-class Start(View):
+class Start(UserView):
     """Start new play session."""
 
     def get(self, request, game_id):
@@ -61,7 +61,7 @@ class Start(View):
         return HttpResponseRedirect(reverse('play'))
 
 
-class Continue(View):
+class Continue(UserView):
     """Continue existing play session."""
 
     def get(self, request, session_id):

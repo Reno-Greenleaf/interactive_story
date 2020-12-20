@@ -7,15 +7,17 @@ from django.views import View
 
 from game.forms import GameForm
 from game.models import Game
+from custom_user.views import UserView
 
 
-class GameView(View):
+class GameView(UserView):
     """Base view for editor views."""
+
     def dispatch(self, request, *args, **kwargs):
         game_id = request.session.get('game', 0)
 
         try:
-            self.current_game = Game.objects.get(pk=game_id)
+            self.current_game = request.user.games.get(pk=game_id)
         except Game.DoesNotExist:
             messages.add_message(
                 request,
@@ -105,7 +107,7 @@ class DeleteGame(GameView):
         return HttpResponseRedirect(reverse('games'))
 
 
-class SelectGame(View):
+class SelectGame(UserView):
     def get(self, request, game_id):
         try:
             game = request.user.games.get(pk=game_id)
@@ -113,7 +115,7 @@ class SelectGame(View):
             messages.add_message(
                 request,
                 messages.INFO,
-                "You aren't author.",
+                "You aren't the author.",
             )
             return HttpResponseRedirect(reverse('games'))
 
