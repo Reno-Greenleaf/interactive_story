@@ -1,13 +1,13 @@
 """Player views."""
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.contrib import messages
 
+from custom_user.views import UserView
 from game.models import Game
 from player.forms import PlayForm
 from player.models import Session
-from custom_user.views import UserView
 
 
 class Play(UserView):
@@ -21,17 +21,7 @@ class Play(UserView):
         command = session.place.commands.filter(text=command_text).first()
 
         if command:
-            requirement = command.requirements.exclude(event__in=session.happened.all()).order_by('-priority').first()
-
-            if requirement:
-                output = requirement.fail
-            else:
-                session.happened.add(command.triggers)
-                output = command.success
-
-                if command.destination:
-                    session.place = command.destination
-                    session.save()
+            output = command.execute(session)
 
         context = {
             'form': PlayForm(),

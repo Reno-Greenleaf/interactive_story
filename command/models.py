@@ -45,6 +45,29 @@ class Command(models.Model):
 
         return self.text
 
+    def execute(self, session):
+        """Execute a command specified by player.
+
+        Args:
+            session: Session instance
+
+        Returns:
+            text about results of execution
+        """
+        requirement = self.requirements.exclude(event__in=session.happened.all()).first()
+
+        if requirement:
+            output = requirement.fail
+        else:
+            session.happened.add(self.triggers)
+            output = self.success
+
+            if self.destination:
+                session.place = self.destination
+                session.save()
+
+        return output
+
 
 class Requirement(models.Model):
     """Condition under which a command succeeds."""
