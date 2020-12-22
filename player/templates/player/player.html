@@ -3,7 +3,11 @@
 {% block title %}{{ session.game }}{% endblock %}
 
 {% block content %}
+{% if session.place.description %}
+<p>{{ session.place.description }}</p>
+{% else %}
 <p>You're in {{ session.place.name }}.</p>
+{% endif %}
 {% if session.happened.all %}
 <p>Happened events:</p>
 <ul>
