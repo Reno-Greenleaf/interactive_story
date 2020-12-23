@@ -33,6 +33,7 @@ class Command(models.Model):
         on_delete=models.SET_NULL,
         related_name='commands',
     )
+    once = models.BooleanField(default=False)
 
     def __str__(self):
         """Mainly for editor.
@@ -54,10 +55,13 @@ class Command(models.Model):
         Returns:
             text about results of execution
         """
-        requirement = self.requirements.exclude(event__in=session.happened.all()).first()
+        events = session.happened.all()
+        requirement = self.requirements.exclude(event__in=events).first()
 
         if requirement:
             output = requirement.fail
+        elif self.once and self.triggers in events:
+            output = 'You did it already.'
         else:
             session.happened.add(self.triggers)
             output = self.success

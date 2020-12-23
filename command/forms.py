@@ -26,6 +26,7 @@ class CommandForm(forms.Form):
         empty_label='<Nothing>',
         required=False,
     )
+    once = forms.BooleanField(required=False)
 
     def __init__(self, game, *args, **kwargs):
         """Render selects based on current game.

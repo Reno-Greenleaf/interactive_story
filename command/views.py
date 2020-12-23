@@ -67,6 +67,7 @@ class AddCommand(GameView):
             context=form.cleaned_data['context'],
             destination=form.cleaned_data['destination'],
             triggers=form.cleaned_data['triggers'],
+            once=form.cleaned_data['once'],
         )
 
         requirements = RequirementsFormSet(
@@ -116,6 +117,7 @@ class EditCommand(GameView):
             'context': command.context,
             'destination': command.destination,
             'triggers': command.triggers,
+            'once': command.once,
         }
         form = CommandForm(self.current_game, initial=initial)
         return render(
@@ -155,6 +157,7 @@ class EditCommand(GameView):
         command.context = form.cleaned_data['context']
         command.destination = form.cleaned_data['destination']
         command.triggers = form.cleaned_data['triggers']
+        command.once = form.cleaned_data['once']
         command.save()
 
         requirements = RequirementsFormSet(
