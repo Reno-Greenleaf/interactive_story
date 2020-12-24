@@ -60,10 +60,11 @@ class Command(models.Model):
 
         if requirement:
             output = requirement.fail
-        elif self.once and self.triggers in events:
+        elif self.once and self in session.executed.all():
             output = 'You did it already.'
         else:
             session.happened.add(self.triggers)
+            session.executed.add(self)
             output = self.success
 
             if self.destination:

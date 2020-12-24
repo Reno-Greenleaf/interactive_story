@@ -1,6 +1,7 @@
 """Model(s) for player."""
 from django.db import models
 
+from command.models import Command
 from event.models import Event
 from game.models import Game
 from place.models import Place
@@ -20,6 +21,7 @@ class Session(models.Model):
     started = models.DateTimeField(auto_now_add=True)
     last_played = models.DateTimeField(auto_now=True)
     happened = models.ManyToManyField(Event)
+    executed = models.ManyToManyField(Command)
 
     def __str__(self):
         return 'Started {0}'.format(self.started)
