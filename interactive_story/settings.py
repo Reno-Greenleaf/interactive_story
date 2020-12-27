@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'player',
     'interactive_story',
     'custom_user',
+    'conversation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

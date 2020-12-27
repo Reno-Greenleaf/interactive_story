@@ -52,7 +52,7 @@ class Start(UserView):
 
 
 class Continue(UserView):
-    """Continue existing play session."""
+    """Load existing play session."""
 
     def get(self, request, session_id):
         request.session['session_id'] = session_id
