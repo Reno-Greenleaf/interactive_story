@@ -6,7 +6,7 @@ from event.models import Event
 class Exchange(models.Model):
     """Element of a conversation."""
 
-    parent = models.ForeignKey('Exchange', on_delete=models.CASCADE)
+    parent = models.ForeignKey('Exchange', on_delete=models.CASCADE, null=True, blank=True)
     option = models.CharField(max_length=512)
     output = models.TextField()
     game = models.ForeignKey(
@@ -18,4 +18,5 @@ class Exchange(models.Model):
         Event,
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
     )
