@@ -6,10 +6,13 @@ from event.models import Event
 from place.models import Place
 
 
-class CommandForm(forms.Form):
+class CommandForm(forms.ModelForm):
     """Form to edit/add commands."""
 
-    text = forms.CharField()
+    class Meta:
+        exclude = ('game',)
+        model = Command
+
     success = forms.CharField(widget=forms.Textarea, required=False)
     context = forms.ModelChoiceField(
         Place.objects.none(),

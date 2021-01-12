@@ -61,14 +61,9 @@ class AddCommand(GameView):
                 {COMMANDS_KEY: commands, FORM_KEY: form},
             )
 
-        command = self.current_game.commands.create(
-            text=form.cleaned_data['text'],
-            success=form.cleaned_data['success'],
-            context=form.cleaned_data['context'],
-            destination=form.cleaned_data['destination'],
-            triggers=form.cleaned_data['triggers'],
-            once=form.cleaned_data['once'],
-        )
+        command = form.save(commit=False)
+        command.game = self.current_game
+        command.save()
 
         requirements = RequirementsFormSet(
             request.POST,
@@ -111,15 +106,7 @@ class EditCommand(GameView):
             instance=command,
             form_kwargs={GAME_KEY: self.current_game},
         )
-        initial = {
-            'text': command.text,
-            'success': command.success,
-            'context': command.context,
-            'destination': command.destination,
-            'triggers': command.triggers,
-            'once': command.once,
-        }
-        form = CommandForm(self.current_game, initial=initial)
+        form = CommandForm(self.current_game, instance=command)
         return render(
             request,
             'command/edit-command.html',
@@ -141,8 +128,8 @@ class EditCommand(GameView):
         Returns:
             HttpResponseRedirect
         """
-        form = CommandForm(self.current_game, request.POST)
         command = self.current_game.commands.get(pk=command_id)
+        form = CommandForm(self.current_game, request.POST, instance=command)
 
         if not form.is_valid():
             commands = self.current_game.commands.all()
@@ -152,12 +139,8 @@ class EditCommand(GameView):
                 {COMMANDS_KEY: commands, 'command': command, FORM_KEY: form},
             )
 
-        command.text = form.cleaned_data['text']
-        command.success = form.cleaned_data['success']
-        command.context = form.cleaned_data['context']
-        command.destination = form.cleaned_data['destination']
-        command.triggers = form.cleaned_data['triggers']
-        command.once = form.cleaned_data['once']
+        command = form.save(commit=False)
+        command.game = self.current_game
         command.save()
 
         requirements = RequirementsFormSet(
