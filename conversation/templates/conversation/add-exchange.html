@@ -1,6 +1,14 @@
 {% extends 'interactive_story/editor.html' %}
 
 {% block form %}
+{% if conversations %}
+<p>Conversations:</p>
+<ul>
+	{% for conversation in conversations %}
+		<li>{{ conversation.option }}
+	{% endfor %}
+</ul>
+{% endif %}
 <form method="post" action="{% url 'add-exchange' %}">
 	{% csrf_token %}
 	{{ form }}

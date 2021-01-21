@@ -7,17 +7,19 @@ from django.urls import reverse
 
 class AddExchange(GameView):
     def get(self, request):
-        form = ExchangeForm()
-        return render(request, 'conversation/add-exchange.html', {'form': form})
+        form = ExchangeForm(self.current_game)
+        conversations = self.current_game.conversations.filter(parent__isnull=True).all()
+        return render(request, 'conversation/add-exchange.html', {'form': form, 'conversations': conversations})
 
     def post(self, request):
-        form = ExchangeForm(request.POST)
+        form = ExchangeForm(self.current_game, request.POST)
 
         if not form.is_valid():
-            return render(request, 'conversation/add-exchange.html', {'form': form})
+            conversations = self.current_game.conversations.filter(parent__isnull=True).all()
+            return render(request, 'conversation/add-exchange.html', {'form': form, 'conversations': conversations})
 
         exchange = form.save(commit=False)
         exchange.game = self.current_game
         exchange.save()
 
-        return HttpResponseRedirect(reverse('games'))
+        return HttpResponseRedirect(reverse('add-exchange'))
