@@ -17,3 +17,11 @@ class ExchangeForm(forms.ModelForm):
         """
         super().__init__(*args, **kwargs)
         self.fields['triggers'].queryset = game.events.all()
+
+
+OptionFormSet = forms.inlineformset_factory(
+    Exchange,
+    Exchange,
+    extra=3,
+    fields = ('option',)
+)
