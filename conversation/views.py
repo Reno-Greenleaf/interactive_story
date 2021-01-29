@@ -3,6 +3,7 @@ from game.views import GameView
 from conversation.forms import ExchangeForm, OptionFormSet
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib import messages
 
 
 class AddExchange(GameView):
@@ -85,3 +86,19 @@ class EditExchange(GameView):
             )
 
         return HttpResponseRedirect(reverse('edit-exchange', kwargs={'exchange_id': exchange_id}))
+
+
+class DeleteExchange(GameView):
+    def get(self, request, exchange_id):
+        exchange = self.current_game.exchanges.get(pk=exchange_id)
+        return render(request, 'conversation/delete-exchange.html', {'exchange': exchange})
+
+    def post(self, request, exchange_id):
+        exchange = self.current_game.exchanges.get(pk=exchange_id)
+        exchange.delete()
+        messages.add_message(
+            request,
+            messages.INFO,
+            'Exchange "{0}" is removed.'.format(exchange.option),
+        )
+        return HttpResponseRedirect(reverse('add-exchange'))

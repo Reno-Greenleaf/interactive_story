@@ -21,5 +21,6 @@
 		{% endfor %}
 	</ul>
 	<input type="submit" value="Save">
+	<a href="{% url 'delete-exchange' form.instance.pk %}">Delete</a>
 </form>
 {% endblock %}

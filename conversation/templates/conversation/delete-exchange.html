@@ -1,0 +1,11 @@
+{% extends 'interactive_story/editor.html' %}
+
+{% block form %}
+<form method="post" action="{% url 'delete-exchange' exchange.pk %}">
+	{% csrf_token %}
+	<p>Do you really want to delete exchange "{{ exchange.option }}"?</p>
+	<p>All reply exchanges of it are going to be deleted as well.</p>
+	<a href="{% url 'edit-exchange' exchange.pk %}">Cancel</a>
+	<input type="submit" value="Delete">
+</form>
+{% endblock %}

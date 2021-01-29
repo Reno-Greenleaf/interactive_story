@@ -22,7 +22,7 @@ from game.views import CreateGame, DeleteGame, EditGame, SelectGame, Games
 from place.views import AddPlace, EditPlace, DeletePlace
 from player.views import Play, Start, Continue
 from custom_user.views import Login, Logout
-from conversation.views import AddExchange, EditExchange
+from conversation.views import AddExchange, EditExchange, DeleteExchange
 
 urlpatterns = [
     path('', Games.as_view(), name='games'),
@@ -45,4 +45,5 @@ urlpatterns = [
     path('logout', Logout.as_view(), name='logout'),
     path('add-exchange', AddExchange.as_view(), name='add-exchange'),
     path('edit-exchange/<int:exchange_id>', EditExchange.as_view(), name='edit-exchange'),
+    path('delete-exchange/<int:exchange_id>', DeleteExchange.as_view(), name='delete-exchange')
 ]
