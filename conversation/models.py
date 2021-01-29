@@ -12,7 +12,7 @@ class Exchange(models.Model):
     game = models.ForeignKey(
         Game,
         on_delete=models.CASCADE,
-        related_name='conversations',
+        related_name='exchanges',
     )
     triggers = models.ForeignKey(
         Event,
