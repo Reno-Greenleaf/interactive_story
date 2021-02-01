@@ -1,9 +1,15 @@
+"""Form(s) to edit conversations."""
 from django import forms
+
 from conversation.models import Exchange
 
 
 class ExchangeForm(forms.ModelForm):
-    class Meta:
+    """Form to edit exchange."""
+
+    class Meta(object):
+        """Exchange form settings."""
+
         model = Exchange
         exclude = ('game', 'parent', 'option')
 
@@ -23,5 +29,5 @@ OptionFormSet = forms.inlineformset_factory(
     Exchange,
     Exchange,
     extra=3,
-    fields = ('option',)
+    fields=('option',),
 )

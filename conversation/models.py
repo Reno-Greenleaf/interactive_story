@@ -1,12 +1,19 @@
+"""Models for conversations."""
 from django.db import models
-from game.models import Game
+
 from event.models import Event
+from game.models import Game
 
 
 class Exchange(models.Model):
     """Element of a conversation."""
 
-    parent = models.ForeignKey('Exchange', on_delete=models.CASCADE, null=True, blank=True)
+    parent = models.ForeignKey(
+        'Exchange',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     option = models.CharField(max_length=512)
     output = models.TextField()
     game = models.ForeignKey(
@@ -22,6 +29,7 @@ class Exchange(models.Model):
     )
 
     def save(self):
+        """Populate data from different forms for one model."""
         if not self.pk:
             self.output = self.option
 
