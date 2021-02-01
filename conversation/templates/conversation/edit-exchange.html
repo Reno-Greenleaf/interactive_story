@@ -5,7 +5,7 @@
 <p>Conversations:</p>
 <ul>
 	{% for conversation in conversations %}
-		<li><a href="{% url 'edit-exchange' conversation.pk %}">{{ conversation.option }}</a></li>
+		<li><a href="{% url 'edit-exchange' conversation.pk %}">{{ conversation }}</a></li>
 	{% endfor %}
 </ul>
 {% endif %}

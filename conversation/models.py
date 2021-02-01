@@ -20,3 +20,9 @@ class Exchange(models.Model):
         null=True,
         blank=True,
     )
+
+    def save(self):
+        if not self.pk:
+            self.output = self.option
+
+        super().save()

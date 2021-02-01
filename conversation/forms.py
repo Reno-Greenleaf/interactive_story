@@ -5,7 +5,7 @@ from conversation.models import Exchange
 class ExchangeForm(forms.ModelForm):
     class Meta:
         model = Exchange
-        exclude = ('game', 'parent')
+        exclude = ('game', 'parent', 'option')
 
     def __init__(self, game, *args, **kwargs):
         """Render selects based on current game.
