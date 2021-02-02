@@ -7,10 +7,6 @@ from django.urls import reverse
 from command.forms import CommandForm, RequirementsFormSet
 from game.views import GameView
 
-GAME_KEY = 'game'
-COMMANDS_KEY = 'commands'
-FORM_KEY = 'form'
-
 
 class AddCommand(GameView):
     """Add new command."""
@@ -25,18 +21,15 @@ class AddCommand(GameView):
             HttpResponse
         """
         global_commands = self.current_game.commands.filter(context=None).all()
-        initial = {
-            'context': request.GET.get('context', ''),
-        }
-        form = CommandForm(self.current_game, initial=initial)
+        form = CommandForm(self.current_game)
         requirements = RequirementsFormSet(
-            form_kwargs={GAME_KEY: self.current_game},
+            form_kwargs={'game': self.current_game},
         )
         return render(
             request,
             'command/add-command.html',
             {
-                FORM_KEY: form,
+                'form': form,
                 'requirements': requirements,
                 'global_commands': global_commands,
             },
@@ -52,24 +45,24 @@ class AddCommand(GameView):
             HttpResponseRedirect
         """
         form = CommandForm(self.current_game, request.POST)
+        requirements = RequirementsFormSet(
+            request.POST,
+            form_kwargs={'game': self.current_game},
+        )
 
         if not form.is_valid():
             commands = self.current_game.commands.order_by('context').all()
             return render(
                 request,
                 'command/add-command.html',
-                {COMMANDS_KEY: commands, FORM_KEY: form},
+                {'commands': commands, 'form': form},
             )
 
         command = form.save(commit=False)
         command.game = self.current_game
         command.save()
 
-        requirements = RequirementsFormSet(
-            request.POST,
-            instance=command,
-            form_kwargs={GAME_KEY: self.current_game},
-        )
+        requirements.instance = command
 
         if requirements.is_valid():
             requirements.save()
@@ -78,13 +71,15 @@ class AddCommand(GameView):
                 request,
                 'command/add-command.html',
                 {
-                    FORM_KEY: form,
+                    'form': form,
                     'requirements': requirements,
                     'global_commands': self.current_game.commands.filter(context=None).all(),
                 },
             )
 
-        return HttpResponseRedirect(reverse('add-command'))
+        return HttpResponseRedirect(
+            reverse('edit-command', kwargs={'command_id': command.pk}),
+        )
 
 
 class EditCommand(GameView):
@@ -104,7 +99,7 @@ class EditCommand(GameView):
         command = self.current_game.commands.get(pk=command_id)
         requirements = RequirementsFormSet(
             instance=command,
-            form_kwargs={GAME_KEY: self.current_game},
+            form_kwargs={'game': self.current_game},
         )
         form = CommandForm(self.current_game, instance=command)
         return render(
@@ -113,7 +108,7 @@ class EditCommand(GameView):
             {
                 'global_commands': global_commands,
                 'command': command,
-                FORM_KEY: form,
+                'form': form,
                 'requirements': requirements,
             },
         )
@@ -130,24 +125,23 @@ class EditCommand(GameView):
         """
         command = self.current_game.commands.get(pk=command_id)
         form = CommandForm(self.current_game, request.POST, instance=command)
+        requirements = RequirementsFormSet(
+            request.POST,
+            instance=command,
+            form_kwargs={'game': self.current_game},
+        )
 
         if not form.is_valid():
             commands = self.current_game.commands.all()
             return render(
                 request,
                 'command/edit-command.html',
-                {COMMANDS_KEY: commands, 'command': command, FORM_KEY: form},
+                {'commands': commands, 'command': command, 'form': form},
             )
 
         command = form.save(commit=False)
         command.game = self.current_game
         command.save()
-
-        requirements = RequirementsFormSet(
-            request.POST,
-            instance=command,
-            form_kwargs={GAME_KEY: self.current_game},
-        )
 
         if requirements.is_valid():
             requirements.save()
@@ -158,7 +152,7 @@ class EditCommand(GameView):
                 {
                     'global_commands': self.current_game.commands.filter(context=None).all(),
                     'command': command,
-                    FORM_KEY: form,
+                    'form': form,
                     'requirements': requirements,
                 },
             )

@@ -7,9 +7,6 @@ from django.urls import reverse
 from game.views import GameView
 from place.forms import PlaceForm
 
-FORM_KEY = 'form'
-PLACES_KEY = 'places'
-
 
 class AddPlace(GameView):
     def get(self, request):
@@ -18,7 +15,7 @@ class AddPlace(GameView):
         return render(
             request,
             'place/add-place.html',
-            {FORM_KEY: form, PLACES_KEY: places},
+            {'form': form, 'places': places},
         )
 
     def post(self, request):
@@ -29,14 +26,16 @@ class AddPlace(GameView):
             return render(
                 request,
                 'place/add-place.html',
-                {FORM_KEY: form, PLACES_KEY: places},
+                {'form': form, 'places': places},
             )
 
-        self.current_game.places.create(
+        place = self.current_game.places.create(
             name=form.cleaned_data['name'],
             description=form.cleaned_data['description'],
         )
-        return HttpResponseRedirect(reverse('add-place'))
+        return HttpResponseRedirect(
+            reverse('edit-place', kwargs={'place_id': place.pk}),
+        )
 
 
 class EditPlace(GameView):
@@ -49,7 +48,7 @@ class EditPlace(GameView):
         return render(
             request,
             'place/edit-place.html',
-            {PLACES_KEY: places, 'place': place, FORM_KEY: form},
+            {'places': places, 'place': place, 'form': form},
         )
 
     def post(self, request, place_id):
@@ -61,13 +60,15 @@ class EditPlace(GameView):
             return render(
                 request,
                 'place/edit-place.html',
-                {PLACES_KEY: places, 'place': place, FORM_KEY: form},
+                {'places': places, 'place': place, 'form': form},
             )
 
         place.name = form.cleaned_data['name']
         place.description = form.cleaned_data['description']
         place.save()
-        return HttpResponseRedirect(reverse('add-place'))
+        return HttpResponseRedirect(
+            reverse('edit-place', kwargs={'place_id': place.pk}),
+        )
 
 
 class DeletePlace(GameView):

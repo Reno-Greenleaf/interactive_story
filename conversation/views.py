@@ -23,6 +23,7 @@ class AddExchange(GameView):
 
     def post(self, request):
         form = ExchangeForm(self.current_game, request.POST)
+        options_form = OptionFormSet(request.POST)
 
         if not form.is_valid():
             conversations = self.current_game.exchanges.filter(parent__isnull=True).all()
@@ -36,26 +37,26 @@ class AddExchange(GameView):
         exchange.game = self.current_game
         exchange.save()
 
-        options = OptionFormSet(request.POST, instance=exchange)
+        options_form.instance = exchange
 
-        if options.is_valid():
-            exchanges = options.save(commit=False)
+        if options_form.is_valid():
+            options = options_form.save(commit=False)
 
-            for exchange in exchanges:
-                exchange.game = self.current_game
-                exchange.save()
+            for option in options:
+                option.game = self.current_game
+                option.save()
         else:
             return render(
                 request,
                 'conversation/add-exchange.html',
                 {
                     'form': form,
-                    'options': options,
+                    'options': options_form,
                     'conversations': self.current_game.exchanges.filter(parent__isnull=True).all(),
                 },
             )
 
-        return HttpResponseRedirect(reverse('add-exchange'))
+        return HttpResponseRedirect(reverse('edit-exchange', kwargs={'exchange_id': exchange.pk}))
 
 
 class EditExchange(GameView):
@@ -71,6 +72,7 @@ class EditExchange(GameView):
     def post(self, request, exchange_id):
         exchange = self.current_game.exchanges.get(pk=exchange_id)
         form = ExchangeForm(self.current_game, request.POST, instance=exchange)
+        options_form = OptionFormSet(request.POST, instance=exchange)
 
         if not form.is_valid():
             conversations = self.current_game.exchanges.filter(parent__isnull=True).all()
@@ -84,28 +86,26 @@ class EditExchange(GameView):
         exchange.game = self.current_game
         exchange.save()
 
-        options = OptionFormSet(request.POST, instance=exchange)
+        if options_form.is_valid():
+            options = options_form.save(commit=False)
 
-        if options.is_valid():
-            exchanges = options.save(commit=False)
-
-            for exchange in exchanges:
-                exchange.game = self.current_game
-                exchange.save()
+            for option in options:
+                option.game = self.current_game
+                option.save()
         else:
             return render(
                 request,
                 'conversation/edit-exchange.html',
                 {
                     'form': form,
-                    'options': options,
+                    'options': options_form,
                     'conversations': self.current_game.exchanges.filter(parent__isnull=True).all(),
                 },
             )
 
         return HttpResponseRedirect(reverse(
             'edit-exchange',
-            kwargs={'exchange_id': exchange_id},
+            kwargs={'exchange_id': exchange.pk},
         ))
 
 

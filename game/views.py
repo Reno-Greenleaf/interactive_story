@@ -5,9 +5,9 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
 
+from custom_user.views import UserView
 from game.forms import GameForm
 from game.models import Game
-from custom_user.views import UserView
 
 
 class GameView(UserView):
@@ -29,7 +29,9 @@ class GameView(UserView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class CreateGame(View):
+class CreateGame(UserView):
+    """Create new game."""
+
     def get(self, request):
         games = Game.objects.all()
         form = GameForm(None)
@@ -56,6 +58,8 @@ class CreateGame(View):
 
 
 class EditGame(GameView):
+    """Edit main game properties."""
+
     def get(self, request):
         games = Game.objects.all()
         game = self.current_game
@@ -88,6 +92,8 @@ class EditGame(GameView):
 
 
 class DeleteGame(GameView):
+    """Delete a game and all its data."""
+
     def get(self, request):
         return render(
             request,
@@ -108,6 +114,8 @@ class DeleteGame(GameView):
 
 
 class SelectGame(UserView):
+    """Select game for editing."""
+
     def get(self, request, game_id):
         try:
             game = request.user.games.get(pk=game_id)
@@ -129,6 +137,8 @@ class SelectGame(UserView):
 
 
 class Games(View):
+    """List existing games (main page)."""
+
     def get(self, request):
         games = Game.objects.all()
         return render(request, 'game/games.html', {'games': games})

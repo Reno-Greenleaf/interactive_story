@@ -30,7 +30,7 @@ class Exchange(models.Model):
 
     def save(self):
         """Populate data from different forms for one model."""
-        if not self.pk:
+        if not self.pk and not self.output:
             self.output = self.option
 
         super().save()

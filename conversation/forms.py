@@ -30,4 +30,5 @@ OptionFormSet = forms.inlineformset_factory(
     Exchange,
     extra=3,
     fields=('option',),
+    can_delete=False,
 )
