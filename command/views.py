@@ -20,20 +20,11 @@ class AddCommand(GameView):
         Returns:
             HttpResponse
         """
-        global_commands = self.current_game.commands.filter(context=None).all()
         form = CommandForm(self.current_game)
         requirements = RequirementsFormSet(
             form_kwargs={'game': self.current_game},
         )
-        return render(
-            request,
-            'command/add-command.html',
-            {
-                'form': form,
-                'requirements': requirements,
-                'global_commands': global_commands,
-            },
-        )
+        return self._render(request, form, requirements)
 
     def post(self, request):
         """Create a command.
@@ -51,12 +42,7 @@ class AddCommand(GameView):
         )
 
         if not form.is_valid():
-            commands = self.current_game.commands.order_by('context').all()
-            return render(
-                request,
-                'command/add-command.html',
-                {'commands': commands, 'form': form},
-            )
+            return self._render(request, form, requirements)
 
         command = form.save(commit=False)
         command.game = self.current_game
@@ -67,18 +53,22 @@ class AddCommand(GameView):
         if requirements.is_valid():
             requirements.save()
         else:
-            return render(
-                request,
-                'command/add-command.html',
-                {
-                    'form': form,
-                    'requirements': requirements,
-                    'global_commands': self.current_game.commands.filter(context=None).all(),
-                },
-            )
+            return self._render(request, form, requirements)
 
         return HttpResponseRedirect(
             reverse('edit-command', kwargs={'command_id': command.pk}),
+        )
+
+    def _render(self, request, form, requirements_form):
+        global_commands = self.current_game.commands.filter(context=None).all()
+        return render(
+            request,
+            'command/add-command.html',
+            {
+                'form': form,
+                'requirements': requirements_form,
+                'global_commands': global_commands,
+            },
         )
 
 
@@ -95,23 +85,13 @@ class EditCommand(GameView):
         Returns:
             HttpResponse
         """
-        global_commands = self.current_game.commands.filter(context=None).all()
         command = self.current_game.commands.get(pk=command_id)
         requirements = RequirementsFormSet(
             instance=command,
             form_kwargs={'game': self.current_game},
         )
         form = CommandForm(self.current_game, instance=command)
-        return render(
-            request,
-            'command/edit-command.html',
-            {
-                'global_commands': global_commands,
-                'command': command,
-                'form': form,
-                'requirements': requirements,
-            },
-        )
+        return self._render(request, form, requirements)
 
     def post(self, request, command_id):
         """Edit command.
@@ -132,12 +112,7 @@ class EditCommand(GameView):
         )
 
         if not form.is_valid():
-            commands = self.current_game.commands.all()
-            return render(
-                request,
-                'command/edit-command.html',
-                {'commands': commands, 'command': command, 'form': form},
-            )
+            return self._render(request, form, requirements)
 
         command = form.save(commit=False)
         command.game = self.current_game
@@ -146,19 +121,22 @@ class EditCommand(GameView):
         if requirements.is_valid():
             requirements.save()
         else:
-            return render(
-                request,
-                'command/edit-command.html',
-                {
-                    'global_commands': self.current_game.commands.filter(context=None).all(),
-                    'command': command,
-                    'form': form,
-                    'requirements': requirements,
-                },
-            )
+            return self._render(request, form, requirements)
 
         return HttpResponseRedirect(
             reverse('edit-command', kwargs={'command_id': command.pk}),
+        )
+
+    def _render(self, request, form, requirements_form):
+        global_commands = self.current_game.commands.filter(context=None).all()
+        return render(
+            request,
+            'command/edit-command.html',
+            {
+                'global_commands': global_commands,
+                'form': form,
+                'requirements': requirements_form,
+            },
         )
 
 

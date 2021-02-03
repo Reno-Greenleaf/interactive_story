@@ -23,7 +23,7 @@
 	{% endfor %}
 </ul>
 
-<form action="{% url 'edit-command' command.pk %}" method="post" autocomplete="off">
+<form action="{% url 'edit-command' form.instance.pk %}" method="post" autocomplete="off">
 	{% csrf_token %}
 	{{ form }}
 	<p>Requirements:</p>
@@ -34,6 +34,6 @@
 		{% endfor %}
 	</ul>
 	<input type="submit" value="Save">
-	<a href="{% url 'delete-command' command.pk %}">Delete</a>
+	<a href="{% url 'delete-command' form.instance.pk %}">Delete</a>
 </form>
 {% endblock %}

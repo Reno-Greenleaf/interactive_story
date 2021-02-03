@@ -13,25 +13,15 @@ class AddExchange(GameView):
 
     def get(self, request):
         form = ExchangeForm(self.current_game)
-        conversations = self.current_game.exchanges.filter(parent__isnull=True).all()
         options = OptionFormSet()
-        return render(
-            request,
-            'conversation/add-exchange.html',
-            {'form': form, 'conversations': conversations, 'options': options},
-        )
+        return self._render(request, form, options)
 
     def post(self, request):
         form = ExchangeForm(self.current_game, request.POST)
         options_form = OptionFormSet(request.POST)
 
         if not form.is_valid():
-            conversations = self.current_game.exchanges.filter(parent__isnull=True).all()
-            return render(
-                request,
-                'conversation/add-exchange.html',
-                {'form': form, 'conversations': conversations},
-            )
+            return self._render(request, form, options_form)
 
         exchange = form.save(commit=False)
         exchange.game = self.current_game
@@ -46,17 +36,19 @@ class AddExchange(GameView):
                 option.game = self.current_game
                 option.save()
         else:
-            return render(
-                request,
-                'conversation/add-exchange.html',
-                {
-                    'form': form,
-                    'options': options_form,
-                    'conversations': self.current_game.exchanges.filter(parent__isnull=True).all(),
-                },
-            )
+            return self._render(request, form, options_form)
 
-        return HttpResponseRedirect(reverse('edit-exchange', kwargs={'exchange_id': exchange.pk}))
+        return HttpResponseRedirect(
+            reverse('edit-exchange', kwargs={'exchange_id': exchange.pk}),
+        )
+
+    def _render(self, request, form, options_form):
+        conversations = self.current_game.exchanges.filter(parent__isnull=True).all()
+        return render(request, 'conversation/add-exchange.html', {
+            'form': form,
+            'conversations': conversations,
+            'options': options_form,
+        })
 
 
 class EditExchange(GameView):
@@ -65,9 +57,8 @@ class EditExchange(GameView):
     def get(self, request, exchange_id):
         exchange = self.current_game.exchanges.get(pk=exchange_id)
         form = ExchangeForm(self.current_game, instance=exchange)
-        conversations = self.current_game.exchanges.filter(parent__isnull=True).all()
         options = OptionFormSet(instance=exchange)
-        return render(request, 'conversation/edit-exchange.html', {'form': form, 'conversations': conversations, 'options': options})
+        return self._render(request, form, options)
 
     def post(self, request, exchange_id):
         exchange = self.current_game.exchanges.get(pk=exchange_id)
@@ -75,12 +66,7 @@ class EditExchange(GameView):
         options_form = OptionFormSet(request.POST, instance=exchange)
 
         if not form.is_valid():
-            conversations = self.current_game.exchanges.filter(parent__isnull=True).all()
-            return render(
-                request,
-                'conversation/edit-exchange.html',
-                {'form': form, 'conversations': conversations},
-            )
+            return self._render(request, form, options_form)
 
         exchange = form.save(commit=False)
         exchange.game = self.current_game
@@ -93,20 +79,20 @@ class EditExchange(GameView):
                 option.game = self.current_game
                 option.save()
         else:
-            return render(
-                request,
-                'conversation/edit-exchange.html',
-                {
-                    'form': form,
-                    'options': options_form,
-                    'conversations': self.current_game.exchanges.filter(parent__isnull=True).all(),
-                },
-            )
+            return self._render(request, form, options_form)
 
         return HttpResponseRedirect(reverse(
             'edit-exchange',
             kwargs={'exchange_id': exchange.pk},
         ))
+
+    def _render(self, request, form, options_form):
+        conversations = self.current_game.exchanges.filter(parent__isnull=True).all()
+        return render(request, 'conversation/edit-exchange.html', {
+            'form': form,
+            'conversations': conversations,
+            'options': options_form,
+        })
 
 
 class DeleteExchange(GameView):
