@@ -1,9 +1,11 @@
 """Place form(s)."""
 from django import forms
+from place.models import Place
 
 
-class PlaceForm(forms.Form):
+class PlaceForm(forms.ModelForm):
     """Form to edit a place."""
 
-    name = forms.CharField()
-    description = forms.CharField(widget=forms.Textarea, required=False)
+    class Meta:
+        model = Place
+        exclude = ('game', 'description')

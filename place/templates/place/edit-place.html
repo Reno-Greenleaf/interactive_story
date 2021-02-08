@@ -9,10 +9,12 @@
 	{% endfor %}
 </ul>
 
-<form action="{% url 'edit-place' place.pk %}" method="post">
+<form action="{% url 'edit-place' form.instance.pk %}" method="post">
 	{% csrf_token %}
 	{{ form }}
+	{{ description }}
+	{{ paragraphs }}
 	<input type="submit" value="Save">
-	<a href="{% url 'delete-place' place.pk %}">Delete</a>
+	<a href="{% url 'delete-place' form.instance.pk %}">Delete</a>
 </form>
 {% endblock %}

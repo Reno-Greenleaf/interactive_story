@@ -12,6 +12,8 @@
 <form action="{% url 'add-place' %}" method="post">
 	{% csrf_token %}
 	{{ form }}
+	{{ description }}
+	{{ paragraphs }}
 	<input type="submit" value="Add">
 </form>
 {% endblock %}
