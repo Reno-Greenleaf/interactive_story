@@ -13,13 +13,16 @@ class AddPlace(GameView):
     def get(self, request):
         form = PlaceForm()
         description = DetailedOutputForm()
-        paragraphs = ParagraphFormSet()
+        paragraphs = ParagraphFormSet(form_kwargs={'game': self.current_game})
         return self._render(request, form, description, paragraphs)
 
     def post(self, request):
         form = PlaceForm(request.POST)
         description_form = DetailedOutputForm(request.POST)
-        paragraphs_form = ParagraphFormSet(request.POST)
+        paragraphs_form = ParagraphFormSet(
+            request.POST,
+            form_kwargs={'game': self.current_game},
+        )
 
         if not form.is_valid() or not description_form.is_valid() or not paragraphs_form.is_valid():
             return self._render(request, form, description_form, paragraphs_form)

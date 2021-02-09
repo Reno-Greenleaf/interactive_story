@@ -13,6 +13,17 @@ class ParagraphForm(forms.ModelForm):
         model = Paragraph
         exclude = ()
 
+    def __init__(self, game, *args, **kwargs):
+        """Render selects based on current game.
+
+        Args:
+            game: Game model instance
+            *args: default arguments of the form
+            **kwargs: default keyword arguments of the form
+        """
+        super().__init__(*args, **kwargs)
+        self.fields['event'].queryset = game.events.all()
+
 
 ParagraphFormSet = forms.inlineformset_factory(
     DetailedOutput,
