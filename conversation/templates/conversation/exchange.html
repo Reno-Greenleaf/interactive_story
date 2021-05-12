@@ -1,0 +1,9 @@
+{% extends 'interactive_story/common.html' %}
+{% block content %}
+<p>{{ conversation.output }}</p>
+<ul>
+	{% for exchange in conversation.children.all %}
+	<li><a href="{% url 'exchange' exchange.pk %}">{{ exchange.option }}</a>
+	{% endfor %}
+</ul>
+{% endblock %}

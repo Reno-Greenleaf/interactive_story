@@ -13,6 +13,7 @@ class Exchange(models.Model):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
+        related_name='children',
     )
     option = models.CharField(max_length=512)
     output = models.TextField()

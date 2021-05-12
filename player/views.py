@@ -19,6 +19,7 @@ class Play(UserView):
         output = 'Unclear.'
         command_text = request.GET.get('command', '')
         command = session.place.commands.filter(text=command_text).first()
+        conversations = session.game.exchanges.filter(parent__isnull=True).all()
 
         if command:
             output = command.execute(session)
@@ -27,6 +28,7 @@ class Play(UserView):
             'form': PlayForm(),
             'output': output,
             'session': session,
+            'conversations': conversations
         }
 
         return render(request, 'player/player.html', context)

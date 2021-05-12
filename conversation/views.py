@@ -115,3 +115,13 @@ class DeleteExchange(GameView):
             'Exchange "{0}" is removed.'.format(exchange.option),
         )
         return HttpResponseRedirect(reverse('add-exchange'))
+
+
+class Exchange(GameView):
+    def get(self, request, exchange_id):
+        exchange = self.current_game.exchanges.get(pk=exchange_id)
+        return render(
+            request,
+            'conversation/exchange.html',
+            {'conversation': exchange},
+        )

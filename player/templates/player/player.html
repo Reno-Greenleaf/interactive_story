@@ -16,6 +16,12 @@
 {% endfor %}
 </ul>
 {% endif %}
+<p>Conversations</p>
+<ul>
+{% for conversation in conversations %}
+<li><a href="{% url 'exchange' conversation.pk %}">{{ conversation.output }}</a>
+{% endfor %}
+</ul>
 <form method="get" action="{% url 'play' %}">
 	{% csrf_token %}
 	{{ form }}
