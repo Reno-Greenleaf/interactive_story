@@ -24,9 +24,10 @@ from place.views import AddPlace, EditPlace, DeletePlace
 from player.views import Play, Start, Continue
 from custom_user.views import Login, Logout
 from conversation.views import AddExchange, EditExchange, DeleteExchange, Exchange
+from hub.views import Main
 
 urlpatterns = [
-    path('', Games.as_view(), name='games'),
+    # path('', Games.as_view(), name='games'),
     path('admin/', admin.site.urls),
     path('events', Events.as_view(), name='events'),
     path('command/add', AddCommand.as_view(), name='add-command'),
@@ -48,4 +49,9 @@ urlpatterns = [
     path('edit-exchange/<int:exchange_id>', EditExchange.as_view(), name='edit-exchange'),
     path('delete-exchange/<int:exchange_id>', DeleteExchange.as_view(), name='delete-exchange'),
     path('conversation/<int:exchange_id>', Placeholder.as_view(), name='exchange'),
+    # Hub
+    path('', Main.as_view(), name='start'),
+    path('stories', Placeholder.as_view(), name='list-stories'),
+    path('create', Placeholder.as_view(), name='create-story'),
+    path('edit', Placeholder.as_view(), name='list-own-stories'),
 ]
