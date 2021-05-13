@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from interactive_story.views import Placeholder
 from event.views import Events
 from command.views import AddCommand, EditCommand, DeleteCommand
 from game.views import CreateGame, DeleteGame, EditGame, SelectGame, Games
@@ -46,5 +47,5 @@ urlpatterns = [
     path('add-exchange', AddExchange.as_view(), name='add-exchange'),
     path('edit-exchange/<int:exchange_id>', EditExchange.as_view(), name='edit-exchange'),
     path('delete-exchange/<int:exchange_id>', DeleteExchange.as_view(), name='delete-exchange'),
-    path('conversation/<int:exchange_id>', Exchange.as_view(), name='exchange'),
+    path('conversation/<int:exchange_id>', Placeholder.as_view(), name='exchange'),
 ]
