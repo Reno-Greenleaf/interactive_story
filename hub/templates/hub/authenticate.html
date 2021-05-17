@@ -1,0 +1,20 @@
+{% extends 'hub/base.html' %}
+
+{% block title %}Log In{% endblock %}
+
+{% block user %}
+{% if user.is_authenticated %}
+<div>{{ user.username }}, <a href="{% url 'logout' %}">log out</a></div>
+{% else %}
+<div><a href="{% url 'register' %}">Register</a></div>
+{% endif %}
+{% endblock %}
+
+{% block body %}
+<form method="post" action="{% url 'authenticate' %}">
+	{% csrf_token %}
+	<input type="text" name="name" placeholder="Name" />
+	<input type="password" name="password" placeholder="Password" />
+	<input type="submit" value="Proceed" />
+</form>
+{% endblock %}

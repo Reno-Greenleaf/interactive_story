@@ -2,17 +2,30 @@
 <html>
 	<head>
 		<title>{% block title %}Interactive Story{% endblock %}</title>
+		<style>
+			.home {
+				float: left;
+				margin: 2em;
+				display: block;
+			}
+		</style>
 	</head>
 	<body>
+		{% block home %}
 		{% url 'start' as start_url %}
 		{% if request.path != start_url %}
-		<p style="float: left; margin: 2em;"><a href="{{ start_url }}"><img src="{% static 'hub/G12_Places_Home.png' %}" height="100"></a></p>
+		<a href="{{ start_url }}"><img class="home" src="{% static 'hub/G12_Places_Home.png' %}" height="100"></a>
 		{% endif %}
+		{% endblock %}
+
+		{% block user %}
 		{% if user.is_authenticated %}
-		<div><a href="{% url 'logout' %}">Log out</a></div>
+		<div>{{ user.username }}, <a href="{% url 'logout' %}">log out</a></div>
 		{% else %}
-		<div><a href="{% url 'authenticate' %}">Log in</a></div>
+		<div><a href="{% url 'authenticate' %}">Log in</a> or <a href="{% url 'register' %}">register</a></div>
 		{% endif %}
+		{% endblock %}
+
 		{% block body %}Nothing is here.{% endblock %}
 	</body>
 </html>

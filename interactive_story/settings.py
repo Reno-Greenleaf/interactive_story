@@ -32,16 +32,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'hub',
-    'autofixture',
-    'event',
-    'command',
-    'place',
-    'game',
-    'player',
     'interactive_story',
-    'custom_user',
-    'conversation',
-    'detailed_output',
+    'autofixture',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -73,7 +65,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'game.context_processors.current_game',
             ],
         },
     },
@@ -130,4 +121,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-AUTH_USER_MODEL = 'custom_user.User'
+AUTH_USER_MODEL = 'hub.User'
