@@ -1,12 +1,11 @@
 """Main hub views."""
-from django.shortcuts import render
-from django.views import View
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
-from hub.forms import RegistrationForm
-from django.contrib.auth.forms import AuthenticationForm
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
+from django.views import View
 
+from hub.forms import RegistrationForm
 from hub.models import Game
 
 

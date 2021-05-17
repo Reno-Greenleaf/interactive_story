@@ -1,4 +1,6 @@
-{% extends 'hub/base.html' %}
+{% extends 'hub/base.html' %}{% load static %}
+
+{% block home %}<img class="home" src="{% static 'hub/G12_Places_Home.png' %}" height="100">{% endblock %}
 {% block body %}
 		<p>Hello there! There're <a href="{% url 'list-stories' %}">interactive stories</a> you may expirience.</p>
 		<p>You may also <a href="{% url 'create-story' %}">create</a> or <a href="{% url 'list-own-stories' %}">edit</a> your own ones.</p>

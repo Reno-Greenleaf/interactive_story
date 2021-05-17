@@ -2,20 +2,11 @@
 <html>
 	<head>
 		<title>{% block title %}Interactive Story{% endblock %}</title>
-		<style>
-			.home {
-				float: left;
-				margin: 2em;
-				display: block;
-			}
-		</style>
+		<link rel="stylesheet" href="{% static 'hub/style.css' %}">
 	</head>
 	<body>
 		{% block home %}
-		{% url 'start' as start_url %}
-		{% if request.path != start_url %}
-		<a href="{{ start_url }}"><img class="home" src="{% static 'hub/G12_Places_Home.png' %}" height="100"></a>
-		{% endif %}
+		<a href="{% url 'start' %}"><img class="home" src="{% static 'hub/G12_Places_Home.png' %}" height="100"></a>
 		{% endblock %}
 
 		{% block user %}

@@ -1,0 +1,14 @@
+.home {
+	margin: 2em;
+	display: block;
+}
+
+.helptext {
+	color: gray;
+	font-size: .7em;
+}
+
+ul.errorlist li {
+	color: red;
+	font-size: .7em;
+}
