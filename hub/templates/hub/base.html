@@ -1,0 +1,18 @@
+{% load static %}<!DOCTYPE html>
+<html>
+	<head>
+		<title>{% block title %}Interactive Story{% endblock %}</title>
+	</head>
+	<body>
+		{% url 'start' as start_url %}
+		{% if request.path != start_url %}
+		<p style="float: left; margin: 2em;"><a href="{{ start_url }}"><img src="{% static 'hub/G12_Places_Home.png' %}" height="100"></a></p>
+		{% endif %}
+		{% if user.is_authenticated %}
+		<div><a href="{% url 'logout' %}">Log out</a></div>
+		{% else %}
+		<div><a href="{% url 'authenticate' %}">Log in</a></div>
+		{% endif %}
+		{% block body %}Nothing is here.{% endblock %}
+	</body>
+</html>

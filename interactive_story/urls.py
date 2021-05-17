@@ -24,7 +24,7 @@ from place.views import AddPlace, EditPlace, DeletePlace
 from player.views import Play, Start, Continue
 from custom_user.views import Login, Logout
 from conversation.views import AddExchange, EditExchange, DeleteExchange, Exchange
-from hub.views import Main
+from hub.views import Main, List
 
 urlpatterns = [
     # path('', Games.as_view(), name='games'),
@@ -40,18 +40,21 @@ urlpatterns = [
     path('place/add', AddPlace.as_view(), name='add-place'),
     path('place/edit/<int:place_id>', EditPlace.as_view(), name='edit-place'),
     path('place/delete/<int:place_id>', DeletePlace.as_view(), name='delete-place'),
-    path('play', Play.as_view(), name='play'),
+    # path('play', Play.as_view(), name='play'),
     path('start/<int:game_id>', Start.as_view(), name='start'),
     path('continue/<int:session_id>', Continue.as_view(), name='continue'),
-    path('login', Login.as_view(), name='login'),
-    path('logout', Logout.as_view(), name='logout'),
+    # path('login', Login.as_view(), name='login'),
+    # path('logout', Logout.as_view(), name='logout'),
     path('add-exchange', AddExchange.as_view(), name='add-exchange'),
     path('edit-exchange/<int:exchange_id>', EditExchange.as_view(), name='edit-exchange'),
     path('delete-exchange/<int:exchange_id>', DeleteExchange.as_view(), name='delete-exchange'),
     path('conversation/<int:exchange_id>', Placeholder.as_view(), name='exchange'),
     # Hub
     path('', Main.as_view(), name='start'),
-    path('stories', Placeholder.as_view(), name='list-stories'),
+    path('stories', List.as_view(), name='list-stories'),
     path('create', Placeholder.as_view(), name='create-story'),
     path('edit', Placeholder.as_view(), name='list-own-stories'),
+    path('login', Placeholder.as_view(), name='authenticate'),
+    path('logout', Placeholder.as_view(), name='logout'),
+    path('play/<int:game_id>', Placeholder.as_view(), name='play'),
 ]

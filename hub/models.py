@@ -1,3 +1,5 @@
 from django.db import models
 
-# Create your models here.
+class Game(models.Model):
+    title = models.CharField(max_length=256)
+    public = models.BooleanField(default=False)
